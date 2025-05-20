@@ -16,7 +16,7 @@ import kotlin.io.path.Path
 
 // Literally constant in the DreamBot jar.
 // TODO: Monitor changes to this on updates.
-private const val SOME_CONSTANT = "f95cf4001d19fc517ccc94"
+private const val SOME_CONSTANT = "ca29184e51dw5315f41qwe"
 
 class ClientHandler(val username: String, val password: String, val hardwareId: String) : ChannelInboundHandlerAdapter() {
     private lateinit var accountSession: String
