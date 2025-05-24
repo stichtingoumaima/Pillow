@@ -4,12 +4,16 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
+import rip.sunrise.client.utils.extensions.decryptScript
+import rip.sunrise.packets.serverbound.EncryptedScriptRequest
+import rip.sunrise.packets.clientbound.EncryptedScriptResp
 import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.serverbound.*
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.util.Base64
 import java.util.concurrent.ArrayBlockingQueue
 import kotlin.concurrent.thread
 import kotlin.io.path.Path
@@ -18,12 +22,13 @@ import kotlin.io.path.Path
 // TODO: Monitor changes to this on updates.
 private const val SOME_CONSTANT = "ca29184e51dw5315f41qwe"
 
-class ClientHandler(val username: String, val password: String, val hardwareId: String) : ChannelInboundHandlerAdapter() {
+class ClientHandler(val username: String, val password: String, val hardwareId: String) :
+    ChannelInboundHandlerAdapter() {
     private lateinit var accountSession: String
     private lateinit var scriptSession: String
     private var userId: Int = -1
 
-    private val queue = ArrayBlockingQueue<String>(1)
+    private val queue = ArrayBlockingQueue<Any>(1)
 
     override fun channelActive(ctx: ChannelHandlerContext) {
         println("Open")
@@ -75,17 +80,17 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
                 // TODO: This is very ugly
                 thread {
                     msg.v.forEach { script ->
-                        ctx.writeAndFlush(ScriptURLRequest(script.x, accountSession, scriptSession))
+                        ctx.writeAndFlush(EncryptedScriptRequest(script.x, accountSession, scriptSession))
                         // Wait for URL response
                         while (queue.isEmpty()) { }
-                        val url = queue.poll() as String
+                        val data = queue.poll() as ByteArray
 
                         ctx.writeAndFlush(ScriptOptionsRequest(accountSession, scriptSession))
                         while (queue.isEmpty()) { }
                         val options = queue.poll() as String
 
                         println("Writing")
-                        writeScriptData(script, url, options)
+                        writeScriptData(script, data, options)
                         println("Script written")
                     }
 
@@ -93,8 +98,17 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
                 }
             }
 
-            is ScriptURLResp -> {
-                queue.put(msg.w)
+            is EncryptedScriptResp -> {
+                val bytes = HttpClient.newHttpClient()
+                    .send(
+                        HttpRequest.newBuilder(URI(msg.w)).build(),
+                        HttpResponse.BodyHandlers.ofInputStream()
+                    )
+                    .body()
+                    .readAllBytes()
+                    .decryptScript(Base64.getDecoder().decode(msg.z))
+
+                queue.put(bytes)
             }
 
             is ScriptOptionsResp -> {
@@ -123,7 +137,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
         }
     }
 
-    private fun writeScriptData(script: ScriptWrapper, url: String, options: String) {
+    private fun writeScriptData(script: ScriptWrapper, data: ByteArray, options: String) {
         val name = sanitizeName(script.m)
 
         val gson = Gson().newBuilder().setPrettyPrinting().create()
@@ -144,11 +158,10 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
             }))
         }
 
-        val bytes = HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI(url)).build(), HttpResponse.BodyHandlers.ofInputStream()).body()
         outputPath.resolve("jars/$name.jar").toFile().also {
             it.parentFile.mkdirs()
             it.createNewFile()
-            it.writeBytes(bytes.readBytes())
+            it.writeBytes(data)
         }
 
         outputPath.resolve("options/$name.txt").toFile().also {
