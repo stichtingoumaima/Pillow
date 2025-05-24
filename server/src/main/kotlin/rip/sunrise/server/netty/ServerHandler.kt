@@ -7,10 +7,15 @@ import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.serverbound.*
 import rip.sunrise.server.config.Config
 import rip.sunrise.server.http.JarHttpServer
+import rip.sunrise.server.utils.extensions.md5sum
+import java.util.Base64
 
 const val ACCOUNT_SESSION_ID = "cMU/vYTQnRyD2cFx1i1J6aa+ZpRIINh5qkMxoTh8XoA"
 const val SCRIPT_SESSION_ID = "dbsVbKA4mRLE4NaOMXCCnvPYEJsNsXdwek6hosbCiQ0"
 const val USER_ID = 1
+
+val SCRIPT_AES_KEY = ByteArray(32) { 0 }
+val SCRIPT_IV = ByteArray(16) { 0 }
 
 class ServerHandler(private val config: Config, private val http: JarHttpServer) : SimpleChannelInboundHandler<Any>() {
     private val sessions = mutableMapOf<ChannelHandlerContext, Int>()
@@ -22,6 +27,19 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
                 sessions[ctx] = -1
 
                 ctx.writeAndFlush(LoginResp(msg.f, ACCOUNT_SESSION_ID, hashSetOf(10), USER_ID))
+            }
+
+            is EncryptedScriptRequest -> {
+                val endpoint = http.getScriptEndpoint(msg.f)
+                val serverUrl = config.serverUrl.removeSuffix("/")
+
+                @OptIn(ExperimentalStdlibApi::class)
+                val checksum = http.getEncryptedScript(msg.f).md5sum().toHexString()
+
+                val script = config.getScript(msg.f)
+
+                sessions[ctx] = msg.f
+                ctx.writeAndFlush(EncryptedScriptResp("$serverUrl/$endpoint", sanitizeName(script.metadata.m), checksum, Base64.getEncoder().encodeToString(SCRIPT_AES_KEY), -1))
             }
 
             is RevisionInfoRequest -> {
@@ -64,5 +82,9 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
     private fun encryptOption(value: Int, scriptSessionId: String, userId: Int): Int {
         return value xor scriptSessionId.hashCode() xor userId
+    }
+
+    private fun sanitizeName(name: String): String {
+        return name.replace(" ", "_").replace("[^A-Za-z0-9_]".toRegex(), "")
     }
 }

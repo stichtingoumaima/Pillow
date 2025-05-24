@@ -15,14 +15,15 @@ object ObfuscatedEncoder : MessageToByteEncoder<Serializable>() {
     private const val TYPE_THIN_DESCRIPTOR: Int = 1
 
     val map = mapOf(
-        ScriptSessionResp::class to "a9",
-        RevisionInfoResp::class  to "a6",
-        ScriptStartResp::class   to "Ad",
-        ScriptListResp::class    to "a3",
-        ScriptURLResp::class     to "b2",
-        ScriptWrapper::class     to "b3",
-        LoginResp::class         to "ap",
-        ScriptOptionsResp::class to "bd",
+        ScriptSessionResp::class   to "a9",
+        RevisionInfoResp::class    to "a6",
+        ScriptStartResp::class     to "Ad",
+        ScriptListResp::class      to "a3",
+        ScriptURLResp::class       to "b2",
+        ScriptWrapper::class       to "b3",
+        LoginResp::class           to "ap",
+        ScriptOptionsResp::class   to "bd",
+        EncryptedScriptResp::class to "aJ",
 
         LoginRequest::class to "aI",
         RevisionInfoRequest::class to "aQ",
@@ -31,6 +32,7 @@ object ObfuscatedEncoder : MessageToByteEncoder<Serializable>() {
         ScriptSessionRequest::class to "ba",
         ScriptURLRequest::class to "bB",
         ScriptOptionsRequest::class to "a1",
+        EncryptedScriptRequest::class to "B5",
     ).map { (k, v) -> k.java.name to "org.dreambot.$v" }.toMap()
 
     override fun encode(ctx: ChannelHandlerContext, msg: Serializable, out: ByteBuf) {

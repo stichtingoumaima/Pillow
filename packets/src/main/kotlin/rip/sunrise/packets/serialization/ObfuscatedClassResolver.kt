@@ -17,6 +17,7 @@ object ObfuscatedClassResolver : ClassResolver {
         "bB" to ScriptURLRequest::class,
         "bq" to ScriptStartRequest::class,
         "a1" to ScriptOptionsRequest::class,
+        "B5" to EncryptedScriptRequest::class,
 
         "a9" to ScriptSessionResp::class,
         "a6" to RevisionInfoResp::class,
@@ -26,6 +27,7 @@ object ObfuscatedClassResolver : ClassResolver {
         "b3" to ScriptWrapper::class,
         "ap" to LoginResp::class,
         "bd" to ScriptOptionsResp::class,
+        "aJ" to EncryptedScriptResp::class,
     ).map { (k, v) -> "org.dreambot.$k" to v.java }.toMap()
 
     override fun resolve(className: String?): Class<*> {
