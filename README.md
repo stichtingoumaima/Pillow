@@ -14,16 +14,22 @@ Their script trial makes me able to get my hands on the script jar. That's not g
 A lot of the code that scripts use to verify whether you actually own their script can also be bypassed (as seen in the hooks to `ScriptManager`).
 
 One thing I find funny is that the packets **MIGHT** be stored as obfuscated on their server side, due to **ALL OF THEM** being valid java class names, whereas the rest get obfuscated to start with a digit.
+
 ## Getting Started
+Make an account on their [website](https://dreambot.org/) and **try** some scripts. This allows them to be downloaded.
 
 Running the client requires you
-to set the environment variables
-defined in the [client handler](https://github.com/Sunderw3k/Pillow/blob/master/client/src/main/kotlin/rip/sunrise/client/ClientInitializer.kt) to your account's info.
+to set the environment variables `USERNAME`, `PASSWORD`, and `HARDWARE_ID`.
 
-Then make an account on their [website](https://dreambot.org/) and **try** some scripts.
+The client will download the scripts and output them into the current working directory,
+The folder structure it creates is perfect for running the server.
+You can add `config.json` there (see below).
 
 ### Hardware ID
 Crucial. Hardware ID bans exist, thus it's important to set this properly.
+
+This is only what they use to get the ID; you can set it to anything by using the `HARDWARE_ID` environment variable.
+It's best if it matches in the length and format.
 
 Windows
 ```
@@ -40,14 +46,13 @@ cat /var/lib/dbus/machine-id // As a backup in case the first fails
 ```
 
 ### Downloading
-
 When you run the client `revision.txt` will be automatically downloaded into a new folder in the current directory called `output`.
 That contains everything necessary for the server setup.
 
 **Make sure to set the correct path in downloaded config files or copy them to the server working directory.**
 
-### Server
-Make a file `config.json` for the server config, yes the filename is important.
+### Server Setup
+Make a file `config.json` for the server config. Yes, the filename is important.
 
 ```json
 {
@@ -64,16 +69,35 @@ They contain metadata about the script; you can probably guess how that works.
 
 The `options/_.txt` files are also generated, not sure what they're trying to protect by doing that.
 
-Change the server options in the [server main file](https://github.com/Sunderw3k/Pillow/blob/master/server/src/main/kotlin/rip/sunrise/server/Main.kt), make sure the NETTY_PORT matches the one in [the agent](https://github.com/Sunderw3k/Pillow/blob/master/agent/src/main/kotlin/rip/sunrise/agent/Main.kt). And that the HTTP_PORT matches the domain above.
+Change the server options in the [server main file](https://github.com/Sunderw3k/Pillow/blob/master/server/src/main/kotlin/rip/sunrise/server/Main.kt),
+make sure the `NETTY_PORT` matches the one in [the agent](https://github.com/Sunderw3k/Pillow/blob/master/agent/src/main/kotlin/rip/sunrise/agent/Main.kt).
+And that the HTTP_PORT matches the domain above.
+
+The recommended server structure looks like this:
+```
+├── config.json
+├── configs
+│   └── Script_Name.json
+├── jars
+│   └── Script_Name.jar
+├── options
+│   └── Script_Name.txt
+└── revision.txt
+```
 ## Usage
 
-To run the server set the environment variable defined in the server main (default: CONFIG_DIR) to the directory with the config.json file.
+### Running the server
+To run the server set the environment variable `CONFIG_DIR` to the directory with the config.json file.
 ```sh
 java -jar /path/to/server.jar
 ```
 
-To run the client, get the DreamBot client jar from their website. Then run
+### Running the client
+To run the client, you can either download and run the loader once,
+which will place the `client.jar` file in `<user home>/DreamBot/BotData/client.jar`,
+or you can download the JAR file directly from https://downloads.dreambot.org/dreambot-latest.jar.
 
+Then you can connect to your own server with:
 ```sh
 java -javaagent:/path/to/agent.jar -jar /path/to/dreambot.jar
 ```
