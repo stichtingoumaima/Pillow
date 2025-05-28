@@ -57,6 +57,9 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
             is aY -> ctx.writeAndFlush(bs(USER_ID))
 
+            is GetActiveInstancesRequest -> ctx.writeAndFlush(GetInstancesResp(0))
+            is GetTotalInstancesRequest -> ctx.writeAndFlush(GetInstancesResp(1))
+
             is ScriptURLRequest -> {
                 val endpoint = http.getScriptEndpoint(msg.f)
                 val serverUrl = config.serverUrl.removeSuffix("/")

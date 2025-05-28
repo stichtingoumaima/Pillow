@@ -24,7 +24,10 @@ object ObfuscatedEncoder : MessageToByteEncoder<Serializable>() {
         LoginResp::class           to "ap",
         ScriptOptionsResp::class   to "bd",
         EncryptedScriptResp::class to "aJ",
+        GetInstancesResp::class    to "ah",
 
+        GetActiveInstancesRequest::class to "bC",
+        GetTotalInstancesRequest::class to "aZ",
         LoginRequest::class to "aI",
         RevisionInfoRequest::class to "aQ",
         FreeScriptListRequest::class to "b1",

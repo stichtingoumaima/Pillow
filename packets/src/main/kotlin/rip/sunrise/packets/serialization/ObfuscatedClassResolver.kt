@@ -18,7 +18,10 @@ object ObfuscatedClassResolver : ClassResolver {
         "bq" to ScriptStartRequest::class,
         "a1" to ScriptOptionsRequest::class,
         "B5" to EncryptedScriptRequest::class,
+        "bC" to GetActiveInstancesRequest::class,
+        "aZ" to GetTotalInstancesRequest::class,
 
+        "ah" to GetInstancesResp::class,
         "a9" to ScriptSessionResp::class,
         "a6" to RevisionInfoResp::class,
         "Ad" to ScriptStartResp::class,
