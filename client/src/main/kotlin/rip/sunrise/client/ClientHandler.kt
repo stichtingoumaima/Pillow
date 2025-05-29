@@ -99,14 +99,17 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
             }
 
             is EncryptedScriptResp -> {
-                val bytes = HttpClient.newHttpClient()
+                val encrypted = HttpClient.newHttpClient()
                     .send(
                         HttpRequest.newBuilder(URI(msg.w)).build(),
                         HttpResponse.BodyHandlers.ofInputStream()
                     )
                     .body()
                     .readAllBytes()
-                    .decryptScript(Base64.getDecoder().decode(msg.z))
+
+                val bytes = msg.z?.let {
+                    encrypted.decryptScript(Base64.getDecoder().decode(it))
+                } ?: encrypted
 
                 queue.put(bytes)
             }

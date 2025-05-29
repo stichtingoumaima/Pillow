@@ -11,5 +11,5 @@ import java.io.Serializable
  * z -> 256bit AES key
  * g -> trial time in seconds, <= 0 or above 1d is forever
  */
-data class EncryptedScriptResp(val w: String, val t: String, val l: String, val z: String, val g: Int) :
+data class EncryptedScriptResp(val w: String, val t: String?, val l: String?, val z: String?, val g: Int) :
     Serializable
