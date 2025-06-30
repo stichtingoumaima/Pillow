@@ -20,7 +20,11 @@ import kotlin.io.path.Path
 
 // Literally constant in the DreamBot jar.
 // TODO: Monitor changes to this on updates.
-private const val SOME_CONSTANT = "ca29184e51dw5315f41qwe"
+private const val SOME_CONSTANT = "03c7c0ace395d80182db07"
+
+// sha256sum of client.jar
+// TODO: Auto-Resolve
+private const val CLIENT_SHA256 = "98417e7c2ae1013d06ebf2cfe6e1fbabb3b5724053a4c13cdef2cf764d317f5c"
 
 class ClientHandler(val username: String, val password: String, val hardwareId: String) :
     ChannelInboundHandlerAdapter() {
@@ -43,6 +47,10 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
 
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
         when (msg) {
+            is String -> {
+                handleJson(ctx, msg)
+            }
+
             is LoginResp -> {
                 userId = msg.a
                 accountSession = msg.d
@@ -66,7 +74,6 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
 
             is ScriptSessionResp -> {
                 if (msg.c == null) {
-
                     error("Failed to get script session. The HARDWARE_ID might be incorrect.")
                 }
                 scriptSession = msg.c!!
@@ -126,8 +133,28 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
                 }
             }
 
-            else -> error("Unknown message $msg")
+            else -> println("Unknown message $msg")
         }
+    }
+
+    fun handleJson(ctx: ChannelHandlerContext, msg: String) {
+        val json = Gson().fromJson(msg, JsonObject::class.java)
+        val code = json.get("m").asString
+
+        val obj = JsonObject().apply {
+            addProperty("m", code)
+        }
+        when (code) {
+            // Sent when requesting revision info.
+            "a" -> {
+                obj.addProperty("r", CLIENT_SHA256)
+                obj.addProperty("c", hardwareId)
+            }
+            "b" -> TODO()
+            "z" -> TODO()
+        }
+
+        ctx.writeAndFlush(obj.toString())
     }
 
     private fun writeRevisionData(data: String) {

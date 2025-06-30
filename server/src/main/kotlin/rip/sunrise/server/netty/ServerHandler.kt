@@ -1,5 +1,7 @@
 package rip.sunrise.server.netty
 
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import org.dreambot.*
@@ -23,10 +25,14 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
     override fun channelRead0(ctx: ChannelHandlerContext, msg: Any) {
         println("Got message: $msg")
         when (msg) {
+            is String -> {
+                handleJson(ctx, msg)
+            }
+
             is LoginRequest -> {
                 sessions[ctx] = -1
 
-                ctx.writeAndFlush(LoginResp(msg.f, ACCOUNT_SESSION_ID, hashSetOf(10), USER_ID))
+                ctx.writeAndFlush(LoginResp(msg.l, ACCOUNT_SESSION_ID, hashSetOf(10), USER_ID))
             }
 
             is EncryptedScriptRequest -> {
@@ -43,7 +49,10 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
             }
 
             is RevisionInfoRequest -> {
-                ctx.writeAndFlush(RevisionInfoResp(config.revisionData))
+                // Some sort of pure JSON request
+                ctx.writeAndFlush(JsonObject().apply {
+                    addProperty("m", "a")
+                }.toString())
             }
 
             is FreeScriptListRequest -> ctx.writeAndFlush(ScriptListResp(emptyList()))
@@ -80,6 +89,22 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
             }
 
             else -> error("Unknown packet $msg")
+        }
+    }
+
+    fun handleJson(ctx: ChannelHandlerContext, msg: String) {
+        println("Got JSON Message!")
+
+        val json = Gson().fromJson(msg, JsonObject::class.java)
+        val code = json.get("m").asString
+
+        when (code) {
+            // Sent when requesting revision info.
+            "a" -> {
+                ctx.writeAndFlush(RevisionInfoResp(config.revisionData))
+            }
+            "b" -> TODO()
+            "z" -> TODO()
         }
     }
 
