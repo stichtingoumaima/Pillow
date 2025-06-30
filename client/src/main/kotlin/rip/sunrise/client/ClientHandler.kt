@@ -5,26 +5,16 @@ import com.google.gson.JsonObject
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
 import rip.sunrise.client.utils.extensions.decryptScript
-import rip.sunrise.packets.serverbound.EncryptedScriptRequest
-import rip.sunrise.packets.clientbound.EncryptedScriptResp
 import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.serverbound.*
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-import java.util.Base64
+import java.util.*
 import java.util.concurrent.ArrayBlockingQueue
 import kotlin.concurrent.thread
 import kotlin.io.path.Path
-
-// Literally constant in the DreamBot jar.
-// TODO: Monitor changes to this on updates.
-private const val SOME_CONSTANT = "03c7c0ace395d80182db07"
-
-// sha256sum of client.jar
-// TODO: Auto-Resolve
-private const val CLIENT_SHA256 = "98417e7c2ae1013d06ebf2cfe6e1fbabb3b5724053a4c13cdef2cf764d317f5c"
 
 class ClientHandler(val username: String, val password: String, val hardwareId: String) :
     ChannelInboundHandlerAdapter() {
@@ -37,7 +27,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
     override fun channelActive(ctx: ChannelHandlerContext) {
         println("Open")
 
-        ctx.writeAndFlush(LoginRequest(username, password, SOME_CONSTANT))
+        ctx.writeAndFlush(LoginRequest(username, password, DBClientData.sharedSecret))
     }
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
@@ -55,12 +45,14 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
                 userId = msg.a
                 accountSession = msg.d
 
+                // BANNED and BANNED_2
+                if (5 in msg.v || 42 in msg.v) error("This account is banned. Change the IP before making a new one.")
+
                 if (userId <= 0 || accountSession.isEmpty()) {
                     error("Something went wrong logging in! Try changing the HARDWARE_ID, IP, or account. $msg")
                 }
 
-                ctx.writeAndFlush(RevisionInfoRequest(hardwareId, SOME_CONSTANT))
-                ctx.writeAndFlush(ScriptSessionRequest("$accountSession:MID:$hardwareId"))
+                ctx.writeAndFlush(RevisionInfoRequest(hardwareId, DBClientData.sharedSecret))
             }
 
             is RevisionInfoResp -> {
@@ -70,6 +62,8 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
 
                 writeRevisionData(msg.e!!)
                 println("Revision data written")
+
+                ctx.writeAndFlush(ScriptSessionRequest("$accountSession:MID:$hardwareId"))
             }
 
             is ScriptSessionResp -> {
@@ -147,7 +141,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
         when (code) {
             // Sent when requesting revision info.
             "a" -> {
-                obj.addProperty("r", CLIENT_SHA256)
+                obj.addProperty("r", DBClientData.hash)
                 obj.addProperty("c", hardwareId)
             }
             "b" -> TODO()

@@ -13,6 +13,11 @@ repositories {
 dependencies {
     implementation(libs.netty)
     implementation(libs.gson)
+
+    implementation(libs.asm)
+    implementation(libs.asm.commons)
+    implementation(libs.asm.tree)
+
     implementation(project(":packets"))
 }
 
