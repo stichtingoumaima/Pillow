@@ -113,7 +113,7 @@ object DBClientData {
         val const2 = methodInsn.previous
         if (const2 !is IntInsnNode) error("Bad pattern!")
 
-        val const1 = methodInsn.previous
+        val const1 = const2.previous
         if (const1 !is IntInsnNode) error("Bad pattern!")
 
         val clazz = CLIENT_CL.loadClass(methodInsn.owner.replace("/", "."))
