@@ -19,7 +19,6 @@ import rip.sunrise.packets.serialization.ObfuscatedEncoder
 
 const val USERNAME_ENV = "USERNAME"
 const val PASSWORD_ENV = "PASSWORD"
-const val HARDWARE_ID_ENV = "HARDWARE_ID"
 
 fun main() {
     val username = System.getenv(USERNAME_ENV)
@@ -32,18 +31,13 @@ fun main() {
         error("No password set!")
     }
 
-    val hardwareId = System.getenv(HARDWARE_ID_ENV)
-    if (hardwareId == null || hardwareId.isBlank()) {
-        error("No hardware id set!")
-    }
-
     val group = NioEventLoopGroup()
     try {
         val bootstrap = Bootstrap()
         bootstrap.group(group)
             .channel(NioSocketChannel::class.java)
             .option(ChannelOption.SO_KEEPALIVE, true)
-            .handler(ClientInitializer(username, password, hardwareId))
+            .handler(ClientInitializer(username, password, UserAnonymization.getHwid(username)))
 
         println("Connecting to DreamBot servers.")
         val f = bootstrap.connect("cdn.dreambot.org", 43831).sync()
