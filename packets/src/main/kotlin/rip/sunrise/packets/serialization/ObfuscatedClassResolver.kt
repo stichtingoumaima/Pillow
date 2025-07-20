@@ -6,15 +6,14 @@ import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.serverbound.*
 
 object ObfuscatedClassResolver : ClassResolver {
-    val defaultResolver = ClassResolvers.cacheDisabled(null)
+    val defaultResolver: ClassResolver = ClassResolvers.cacheDisabled(null)
 
     val map = mapOf(
-        "aI" to LoginRequest::class,
+        "b8" to LoginRequest::class,
         "aQ" to RevisionInfoRequest::class,
         "b1" to FreeScriptListRequest::class,
         "aR" to PaidScriptListRequest::class,
         "ba" to ScriptSessionRequest::class,
-        "bB" to ScriptURLRequest::class,
         "bq" to ScriptStartRequest::class,
         "a1" to ScriptOptionsRequest::class,
         "B5" to EncryptedScriptRequest::class,
@@ -26,9 +25,8 @@ object ObfuscatedClassResolver : ClassResolver {
         "a6" to RevisionInfoResp::class,
         "Ad" to ScriptStartResp::class,
         "a3" to ScriptListResp::class,
-        "b2" to ScriptURLResp::class,
         "b3" to ScriptWrapper::class,
-        "ap" to LoginResp::class,
+        "bf" to LoginResp::class,
         "bd" to ScriptOptionsResp::class,
         "aJ" to EncryptedScriptResp::class,
     ).map { (k, v) -> "org.dreambot.$k" to v.java }.toMap()

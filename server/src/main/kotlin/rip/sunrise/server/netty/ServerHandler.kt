@@ -14,6 +14,7 @@ import java.util.Base64
 
 const val ACCOUNT_SESSION_ID = "cMU/vYTQnRyD2cFx1i1J6aa+ZpRIINh5qkMxoTh8XoA"
 const val SCRIPT_SESSION_ID = "dbsVbKA4mRLE4NaOMXCCnvPYEJsNsXdwek6hosbCiQ0"
+const val SESSION_TOKEN = "DHGbNt9CZ2v6yNSPvsEq/zv/toLQmA7ET4Kdvq2xeZVol8UMMSyHk0QCyfyRHPf7hhvGvO/CA7M="
 const val USER_ID = 1
 
 val SCRIPT_AES_KEY = ByteArray(32) { 0 }
@@ -32,7 +33,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
             is LoginRequest -> {
                 sessions[ctx] = -1
 
-                ctx.writeAndFlush(LoginResp(msg.l, ACCOUNT_SESSION_ID, hashSetOf(10), USER_ID))
+                ctx.writeAndFlush(LoginResp(msg.q, ACCOUNT_SESSION_ID, SESSION_TOKEN, hashSetOf(10), USER_ID))
             }
 
             is EncryptedScriptRequest -> {
@@ -68,14 +69,6 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
             is GetActiveInstancesRequest -> ctx.writeAndFlush(GetInstancesResp(0))
             is GetTotalInstancesRequest -> ctx.writeAndFlush(GetInstancesResp(1))
-
-            is ScriptURLRequest -> {
-                val endpoint = http.getScriptEndpoint(msg.f)
-                val serverUrl = config.serverUrl.removeSuffix("/")
-
-                sessions[ctx] = msg.f
-                ctx.writeAndFlush(ScriptURLResp("$serverUrl/$endpoint", -1))
-            }
 
             is ScriptOptionsRequest -> {
                 val scriptId = sessions[ctx] ?: error("Couldn't find session $ctx")

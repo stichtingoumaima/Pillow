@@ -3,12 +3,9 @@ package rip.sunrise.packets.serverbound
 import java.io.Serializable
 
 /**
- * l -> username
- * x -> password
- * f -> hardware id
- *
- * For Windows: wmic csproduct get UUID
- * For Mac: system_profiler SPHardwareDataType
- * For anything else (linux): /etc/machine-id, /var/lib/dbus/machine-id as a backup
+ * u -> username
+ * q -> password
+ * y -> session token, or empty for initial login
+ * r -> shared secret
  */
-data class LoginRequest(val l: String, val x: String, val f: String) : Serializable
+data class LoginRequest(val u: String, val q: String, val y: String, val r: String) : Serializable

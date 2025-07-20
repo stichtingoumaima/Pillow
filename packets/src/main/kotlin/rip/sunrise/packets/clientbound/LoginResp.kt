@@ -3,9 +3,10 @@ package rip.sunrise.packets.clientbound
 import java.io.Serializable
 
 /**
- * b -> username
+ * i -> username
  * d -> account session token
- * v -> forum ranks
- * a -> uid
+ * s -> session token (for re-logging)
+ * a -> forum ranks
+ * k -> uid
  */
-data class LoginResp(val b: String, val d: String, val v: HashSet<Int>, val a: Int) : Serializable
+data class LoginResp(val i: String, val p: String, val s: String, val a: HashSet<Int>, val k: Int) : Serializable

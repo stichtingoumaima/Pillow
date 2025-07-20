@@ -4,11 +4,7 @@ import com.google.gson.Gson
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
-import org.objectweb.asm.tree.AbstractInsnNode
-import org.objectweb.asm.tree.ClassNode
-import org.objectweb.asm.tree.FieldInsnNode
-import org.objectweb.asm.tree.IntInsnNode
-import org.objectweb.asm.tree.MethodInsnNode
+import org.objectweb.asm.tree.*
 import rip.sunrise.client.utils.extensions.sha256
 import java.io.File
 import java.net.HttpURLConnection
@@ -93,8 +89,8 @@ object DBClientData {
                     node.methods.forEach { method ->
                         val putField = method.instructions.filterIsInstance<FieldInsnNode>()
                             .filter { it.opcode == Opcodes.PUTFIELD }
-                            .filter { it.owner == "org/dreambot/aI" }
-                            .firstOrNull { it.name == "f" } ?: return@forEach
+                            .filter { it.owner == "org/dreambot/b8" }
+                            .firstOrNull { it.name == "r" } ?: return@forEach
 
                         secret = runCatching { invokeStringDecryption(putField.previous) }.getOrNull() ?: return@forEach
                     }

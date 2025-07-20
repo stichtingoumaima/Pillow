@@ -27,7 +27,8 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
     override fun channelActive(ctx: ChannelHandlerContext) {
         println("Open")
 
-        ctx.writeAndFlush(LoginRequest(username, password, DBClientData.sharedSecret))
+        // TODO: Use the session token, if possible.
+        ctx.writeAndFlush(LoginRequest(username, password, "", DBClientData.sharedSecret))
     }
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
@@ -42,11 +43,11 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
             }
 
             is LoginResp -> {
-                userId = msg.a
-                accountSession = msg.d
+                userId = msg.k
+                accountSession = msg.p
 
                 // BANNED and BANNED_2
-                if (5 in msg.v || 42 in msg.v) error("This account is banned. Change the IP before making a new one.")
+                if (5 in msg.a || 42 in msg.a) error("This account is banned. Change the IP before making a new one.")
 
                 if (userId <= 0 || accountSession.isEmpty()) {
                     error("Something went wrong logging in! Try changing the HARDWARE_ID, IP, or account. $msg")
