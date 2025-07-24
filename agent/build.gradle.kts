@@ -8,12 +8,14 @@ version = "0.0.1"
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
 }
 
 dependencies {
     implementation(libs.asm)
     implementation(libs.asm.commons)
     implementation(libs.asm.tree)
+    implementation("com.github.Sunderw3k:InjectAPI:master-SNAPSHOT")
 }
 
 tasks {
@@ -27,6 +29,14 @@ tasks {
     }
     build {
         finalizedBy(shadowJar)
+    }
+
+    shadowJar {
+        isEnableRelocation = true
+        relocationPrefix = "rip.sunrise.agent.shaded"
+
+        relocate("rip.sunrise.injectapi", "rip.sunrise.injectapi")
+        relocate("kotlin", "kotlin")
     }
 }
 
