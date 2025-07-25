@@ -17,6 +17,7 @@ const val SERVER_HOST = "localhost"
 const val HTTP_HOST = "localhost"
 const val SERVER_PORT = 1337
 
+const val ANTISPOOF_PRODUCT_CONSTANT = 4338329
 const val ANTISPOOF_PREMIUM_CONSTANT = 3985081
 const val ANTISPOOF_SDN_CONSTANT = 2562934
 
@@ -25,10 +26,13 @@ fun premain(args: String?, inst: Instrumentation) {
         InjectHook(
             HeadInjection(),
             URL::class.java,
-            TargetMethod("getHost", "()Ljava/lang/String;"),
+            TargetMethod("getAuthority", "()Ljava/lang/String;"),
             listOf(CapturedArgument(Opcodes.ALOAD, 0))
         ) { ctx: Context, instance: URL ->
-            val caller = Throwable().stackTrace[2].className
+            // TODO:
+            //  Get the caller in a better way: 0 is lambda, 1 is hooked method,
+            //  2 is caller (invoke handler), 3 is Method.invoke, 4 is actual caller
+            val caller = Throwable().stackTrace[4].className
             if (instance.host == HTTP_HOST && caller.startsWith("org.dreambot")) {
                 log("Spoofing script host!")
                 ctx.setReturnValue("cloudflarestorage.com")
@@ -73,7 +77,7 @@ fun premain(args: String?, inst: Instrumentation) {
             listOf(CapturedArgument(Opcodes.ALOAD, 0), CapturedArgument(Opcodes.ILOAD, 1))
         ) { ctx: Context, instance: Any, productId: Int ->
             log("Checking whether we purchased product $productId")
-            if (productId > 0) {
+            if (productId != ANTISPOOF_PRODUCT_CONSTANT && productId > 0) {
                 ctx.setReturnValue(true)
                 return@InjectHook
             }
