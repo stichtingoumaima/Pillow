@@ -1,4 +1,4 @@
-package rip.sunrise.server.config
+package rip.sunrise.client.config
 
 data class ScriptConfig(
     val name: String,

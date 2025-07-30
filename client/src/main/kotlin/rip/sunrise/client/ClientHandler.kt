@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
+import rip.sunrise.client.config.ScriptConfig
 import rip.sunrise.client.utils.extensions.decryptScript
 import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.serverbound.*
@@ -172,15 +173,17 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
         outputPath.resolve("configs/$name.json").toFile().also {
             it.parentFile.mkdirs()
             it.createNewFile()
-            it.writeText(gson.toJson(JsonObject().apply {
-                addProperty("name", script.m)
-                addProperty("description", script.w)
-                addProperty("version", script.e)
-                addProperty("author", script.l)
-                addProperty("imageUrl", script.q)
-                addProperty("jarFile", "jars/$name.jar")
-                addProperty("optionFile", "options/$name.txt")
-            }))
+            it.writeText(gson.toJson(ScriptConfig(
+                name = script.m,
+                description = script.w,
+                version = script.e,
+                author = script.l,
+                imageUrl = script.q,
+                threadUrl = script.v,
+
+                jarFile = "jars/$name.jar",
+                optionFile = "options/$name.txt",
+            )))
         }
 
         outputPath.resolve("jars/$name.jar").toFile().also {

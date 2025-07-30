@@ -53,7 +53,7 @@ class Config(private val configFile: File) {
                     "",
                     "",
                     scriptConfig.author,
-                    "",
+                    scriptConfig.threadUrl,
                     scriptConfig.imageUrl,
                     index,
                     index,
