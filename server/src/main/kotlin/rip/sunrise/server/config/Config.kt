@@ -3,20 +3,20 @@ package rip.sunrise.server.config
 import com.google.gson.Gson
 import rip.sunrise.packets.clientbound.ScriptWrapper
 import java.io.File
+import java.nio.file.Path
 
-class Config(private val configFile: File) {
+class Config(private val configDir: Path) {
     var revisionData = ""
     var scripts = mutableListOf<Script>()
     var serverUrl = ""
 
-    init {
-        assert(configFile.exists())
-
-        load()
-    }
-
     fun load() {
         runCatching {
+            val configFile = configDir.resolve("config.json").toFile()
+            if (!configFile.exists()) {
+                error("File config.json doesn't exist!")
+            }
+
             val gson = Gson()
             val config = gson.fromJson(configFile.reader(), Config::class.java)
 
@@ -34,12 +34,12 @@ class Config(private val configFile: File) {
             scriptConfigDirectory.listFiles()!!.forEachIndexed { index, file ->
                 val scriptConfig = Gson().fromJson(file.reader(), ScriptConfig::class.java)
 
-                val scriptJar = File(scriptConfig.jarFile)
+                val scriptJar = configDir.resolve(scriptConfig.jarFile).toFile()
                 if (!scriptJar.isFile) {
                     error("Script jar ${scriptJar.absolutePath} isn't a normal file!")
                 }
 
-                val optionFile = File(scriptConfig.optionFile)
+                val optionFile = configDir.resolve(scriptConfig.optionFile).toFile()
                 if (!optionFile.isFile) {
                     error("Option file ${scriptJar.absolutePath} isn't a normal file!")
                 }

@@ -17,9 +17,11 @@ const val CONFIG_ENV = "CONFIG_DIR"
 
 fun main() {
     val configDir = Path(System.getenv(CONFIG_ENV))
-    val configFile = configDir.resolve("config.json").toFile()
 
-    val config = Config(configFile)
+    val config = Config(configDir).also {
+        it.load()
+    }
+
     val http = JarHttpServer(HTTP_PORT, config).apply {
         start()
     }
