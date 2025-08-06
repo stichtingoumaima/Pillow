@@ -17,8 +17,8 @@ const val SERVER_HOST = "localhost"
 const val HTTP_HOST = "localhost"
 const val SERVER_PORT = 1337
 
-const val ANTISPOOF_PRODUCT_CONSTANT = 4338329
-const val ANTISPOOF_PREMIUM_CONSTANT = 3985081
+const val ANTISPOOF_PRODUCT_CONSTANT = 6925123
+const val ANTISPOOF_PREMIUM_CONSTANT = 5136948
 const val ANTISPOOF_SDN_CONSTANT = 2562934
 
 fun premain(args: String?, inst: Instrumentation) {
