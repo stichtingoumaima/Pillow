@@ -1,53 +1,47 @@
 package rip.sunrise.packets.msgpack
 
-import org.msgpack.core.MessagePack
+import org.msgpack.core.MessagePacker
 import org.msgpack.core.MessageUnpacker
 
-const val LOGIN_RESPONSE_PACKET_ID = 2
+const val LOGIN_RESPONSE_PACKET_ID: Byte = 2
 
-data class LoginResponse(val username: String, val accountSessionToken: String, val sessionId: String, val userId: Int, val ranks: Set<Int>) {
-    fun pack(): ByteArray {
-        val packer = MessagePack.newDefaultBufferPacker()
+data class LoginResponse(
+    var username: String,
+    var accountSessionToken: String,
+    var sessionId: String,
+    var userId: Int,
+    var ranks: Set<Int>,
+) : Packet<LoginResponse>() {
+    override val id = LOGIN_RESPONSE_PACKET_ID
 
-        packer.packInt(LOGIN_RESPONSE_PACKET_ID)
-        packer.packInt(0)
+    override fun packInner(packer: MessagePacker) {
+        packer.packString(username)
+        packer.packString(accountSessionToken)
+        packer.packString(sessionId)
+        packer.packInt(userId)
 
-        val innerPacker = MessagePack.newDefaultBufferPacker()
-        innerPacker.packString(username)
-        innerPacker.packString(accountSessionToken)
-        innerPacker.packString(sessionId)
-        innerPacker.packInt(userId)
+        packer.packArrayHeader(ranks.size)
+        ranks.forEach { packer.packInt(it) }
+    }
 
-        innerPacker.packArrayHeader(ranks.size)
-        ranks.forEach { innerPacker.packInt(it) }
+    companion object : PacketUnpacker<LoginResponse> {
+        override fun unpack(unpacker: MessageUnpacker): LoginResponse {
+            val username = unpacker.unpackString()
+            val accountSessionToken = unpacker.unpackString()
+            val sessionId = unpacker.unpackString()
+            val userId = unpacker.unpackInt()
 
-        innerPacker.close()
+            val ranks = buildSet {
+                repeat(unpacker.unpackArrayHeader()) {
+                    add(unpacker.unpackInt())
+                }
+            }
 
-        val innerPackerBytes = innerPacker.toByteArray()
-
-        packer.packBinaryHeader(innerPackerBytes.size)
-        packer.writePayload(innerPackerBytes)
-
-        packer.close()
-        return packer.toByteArray()
+            return LoginResponse(username, accountSessionToken, sessionId, userId, ranks)
+        }
     }
 }
 
 fun MessageUnpacker.unpackLoginResponse(): LoginResponse {
-    val unk = unpackInt() // TODO: Also retry count?
-    unpackBinaryHeader() // NOTE: Packet size
-
-    val username = unpackString()
-    val accountSessionToken = unpackString()
-    val sessionId = unpackString()
-    val userId = unpackInt()
-
-    val ranks = buildSet {
-        repeat(unpackArrayHeader()) {
-            add(unpackInt())
-        }
-    }
-
-    assert(!hasNext()) { "Failed to consume whole stream" }
-    return LoginResponse(username, accountSessionToken, sessionId, userId, ranks)
+    return unpackWith(LoginResponse.Companion)
 }

@@ -36,23 +36,23 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
             is ByteArray -> {
                 MessagePack.newDefaultUnpacker(msg).use { unpacker ->
-                    val id = unpacker.unpackInt()
+                    val id = unpacker.unpackByte()
                     println("Got message: $id")
 
                     when (id) {
                         LOGIN_REQUEST_PACKET_ID -> {
                             sessions[ctx] = -1
 
-                            val login = unpacker.unpackLoginRequest()
-                            println(login)
+                            val packet = unpacker.unpackLoginRequest()
+                            println(packet)
                             ctx.writeAndFlush(
                                 LoginResponse(
-                                    login.username,
+                                    packet.username,
                                     ACCOUNT_SESSION_ID,
                                     SESSION_TOKEN,
                                     USER_ID,
                                     hashSetOf(10)
-                                ).pack()
+                                ).pack(0) // TODO: Not fully sure if it only increments on send
                             )
                         }
                     }

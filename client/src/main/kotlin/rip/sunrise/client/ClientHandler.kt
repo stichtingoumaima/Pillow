@@ -33,7 +33,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
         println("Open")
 
         // TODO: Use the session token, if possible.
-        ctx.writeAndFlush(LoginRequest(0, username, password, "", DBClientData.sharedSecret, hardwareId).pack())
+        ctx.writeAndFlush(LoginRequest(username, password, "", DBClientData.sharedSecret, hardwareId).pack(0)) // TODO: Unsure when it increments
     }
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
@@ -52,7 +52,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
 
                 val unpacker = MessagePack.newDefaultUnpacker(msg)
 
-                val id = unpacker.unpackInt()
+                val id = unpacker.unpackByte()
                 println("Got packet ID $id")
 
                 when (id) {
