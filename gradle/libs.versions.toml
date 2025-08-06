@@ -4,7 +4,7 @@
 [versions]
 kotlin-jvm = "2.0.21"
 shadow = "8.3.3"
-netty = "4.1.112.Final"
+netty = "4.2.3.Final"
 gson = "2.11.0"
 asm = "9.7"
 msgpack = "0.9.10"
