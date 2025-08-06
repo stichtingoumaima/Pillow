@@ -9,7 +9,6 @@ object ObfuscatedClassResolver : ClassResolver {
     val defaultResolver: ClassResolver = ClassResolvers.cacheDisabled(null)
 
     val map = mapOf(
-        "aQ" to RevisionInfoRequest::class,
         "b1" to FreeScriptListRequest::class,
         "aR" to PaidScriptListRequest::class,
         "ba" to ScriptSessionRequest::class,
@@ -21,7 +20,6 @@ object ObfuscatedClassResolver : ClassResolver {
 
         "ah" to GetInstancesResp::class,
         "a9" to ScriptSessionResp::class,
-        "a6" to RevisionInfoResp::class,
         "Ad" to ScriptStartResp::class,
         "a3" to ScriptListResp::class,
         "b3" to ScriptWrapper::class,

@@ -16,7 +16,6 @@ object ObfuscatedEncoder : MessageToByteEncoder<Serializable>() {
 
     val map = mapOf(
         ScriptSessionResp::class   to "a9",
-        RevisionInfoResp::class    to "a6",
         ScriptStartResp::class     to "Ad",
         ScriptListResp::class      to "a3",
         ScriptWrapper::class       to "b3",
@@ -26,7 +25,6 @@ object ObfuscatedEncoder : MessageToByteEncoder<Serializable>() {
 
         GetActiveInstancesRequest::class to "bC",
         GetTotalInstancesRequest::class to "aZ",
-        RevisionInfoRequest::class to "aQ",
         FreeScriptListRequest::class to "b1",
         PaidScriptListRequest::class to "aR",
         ScriptSessionRequest::class to "ba",

@@ -9,7 +9,10 @@ import org.msgpack.core.MessagePack
 import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.msgpack.LOGIN_REQUEST_PACKET_ID
 import rip.sunrise.packets.msgpack.LoginResponse
+import rip.sunrise.packets.msgpack.REVISION_INFO_REQUEST_PACKET_ID
+import rip.sunrise.packets.msgpack.RevisionInfoResponse
 import rip.sunrise.packets.msgpack.unpackLoginRequest
+import rip.sunrise.packets.msgpack.unpackRevisionInfoRequest
 import rip.sunrise.packets.serverbound.*
 import rip.sunrise.server.config.Config
 import rip.sunrise.server.http.JarHttpServer
@@ -23,6 +26,8 @@ const val USER_ID = 1
 
 val SCRIPT_AES_KEY = ByteArray(32) { 0 }
 val SCRIPT_IV = ByteArray(16) { 0 }
+
+const val REVISION_INFO_JAVAAGENT_CONSTANT = -1640531527
 
 class ServerHandler(private val config: Config, private val http: JarHttpServer) : SimpleChannelInboundHandler<Any>() {
     private val sessions = mutableMapOf<ChannelHandlerContext, Int>()
@@ -43,17 +48,23 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
                         LOGIN_REQUEST_PACKET_ID -> {
                             sessions[ctx] = -1
 
-                            val packet = unpacker.unpackLoginRequest()
-                            println(packet)
+                            val request = unpacker.unpackLoginRequest()
                             ctx.writeAndFlush(
                                 LoginResponse(
-                                    packet.username,
+                                    request.username,
                                     ACCOUNT_SESSION_ID,
                                     SESSION_TOKEN,
                                     USER_ID,
                                     hashSetOf(10)
                                 ).pack(0) // TODO: Not fully sure if it only increments on send
                             )
+                        }
+
+                        REVISION_INFO_REQUEST_PACKET_ID -> {
+                            val request = unpacker.unpackRevisionInfoRequest()
+
+                            val responseChecksum = request.javaagentFlags.hashCode() xor (USER_ID * REVISION_INFO_JAVAAGENT_CONSTANT)
+                            ctx.writeAndFlush(RevisionInfoResponse(config.revisionData, responseChecksum).pack(1))
                         }
                     }
                 }
@@ -70,13 +81,6 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
                 sessions[ctx] = msg.f
                 ctx.writeAndFlush(EncryptedScriptResp("$serverUrl/$endpoint", sanitizeName(script.metadata.m), checksum, Base64.getEncoder().encodeToString(SCRIPT_AES_KEY), -1))
-            }
-
-            is RevisionInfoRequest -> {
-                // Some sort of pure JSON request
-                ctx.writeAndFlush(JsonObject().apply {
-                    addProperty("m", "a")
-                }.toString())
             }
 
             is FreeScriptListRequest -> ctx.writeAndFlush(ScriptListResp(emptyList()))
@@ -111,6 +115,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
         }
     }
 
+    // TODO: Still used?
     fun handleJson(ctx: ChannelHandlerContext, msg: String) {
         println("Got JSON Message!")
 
@@ -120,7 +125,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
         when (code) {
             // Sent when requesting revision info.
             "a" -> {
-                ctx.writeAndFlush(RevisionInfoResp(config.revisionData))
+//                ctx.writeAndFlush(RevisionInfoResp(config.revisionData))
             }
             "b" -> TODO()
             "z" -> TODO()

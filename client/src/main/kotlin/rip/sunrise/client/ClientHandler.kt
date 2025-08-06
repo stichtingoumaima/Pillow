@@ -10,7 +10,10 @@ import rip.sunrise.client.utils.extensions.decryptScript
 import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.msgpack.LOGIN_RESPONSE_PACKET_ID
 import rip.sunrise.packets.msgpack.LoginRequest
+import rip.sunrise.packets.msgpack.REVISION_INFO_RESPONSE_PACKET_ID
+import rip.sunrise.packets.msgpack.RevisionInfoRequest
 import rip.sunrise.packets.msgpack.unpackLoginResponse
+import rip.sunrise.packets.msgpack.unpackRevisionInfoResponse
 import rip.sunrise.packets.serverbound.*
 import java.net.URI
 import java.net.http.HttpClient
@@ -20,6 +23,8 @@ import java.util.*
 import java.util.concurrent.ArrayBlockingQueue
 import kotlin.concurrent.thread
 import kotlin.io.path.Path
+
+const val REVISION_INFO_JAVAAGENT_CONSTANT = -1640531527
 
 class ClientHandler(val username: String, val password: String, val hardwareId: String) :
     ChannelInboundHandlerAdapter() {
@@ -70,20 +75,19 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
                             error("Something went wrong logging in! Try changing the HARDWARE_ID, IP, or account. $msg")
                         }
 
-                        ctx.writeAndFlush(RevisionInfoRequest(hardwareId, DBClientData.sharedSecret))
+                        ctx.writeAndFlush(RevisionInfoRequest(accountSession, DBClientData.hash, "").pack(1))
+                    }
+
+                    REVISION_INFO_RESPONSE_PACKET_ID -> {
+                        val response = unpacker.unpackRevisionInfoResponse()
+                        assert(response.javaagentChecksum xor (userId * REVISION_INFO_JAVAAGENT_CONSTANT) == 0)
+
+                        writeRevisionData(response.revisionData)
+                        println("Revision data written")
+
+                        ctx.writeAndFlush(ScriptSessionRequest("$accountSession:MID:$hardwareId"))
                     }
                 }
-            }
-
-            is RevisionInfoResp -> {
-                if (msg.e == null) {
-                    error("Failed to get revision info. The constant or HARDWARE_ID might be incorrect.")
-                }
-
-                writeRevisionData(msg.e!!)
-                println("Revision data written")
-
-                ctx.writeAndFlush(ScriptSessionRequest("$accountSession:MID:$hardwareId"))
             }
 
             is ScriptSessionResp -> {
@@ -151,6 +155,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
         }
     }
 
+    // TODO: Still used?
     fun handleJson(ctx: ChannelHandlerContext, msg: String) {
         val json = Gson().fromJson(msg, JsonObject::class.java)
         val code = json.get("m").asString
