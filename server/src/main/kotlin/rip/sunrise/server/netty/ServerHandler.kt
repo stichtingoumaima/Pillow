@@ -41,6 +41,8 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
                     when (id) {
                         LOGIN_REQUEST_PACKET_ID -> {
+                            sessions[ctx] = -1
+
                             val login = unpacker.unpackLoginRequest()
                             println(login)
                             ctx.writeAndFlush(
@@ -55,12 +57,6 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
                         }
                     }
                 }
-            }
-
-            is LoginRequest -> {
-                sessions[ctx] = -1
-
-                ctx.writeAndFlush(LoginResp(msg.q, ACCOUNT_SESSION_ID, SESSION_TOKEN, hashSetOf(10), USER_ID))
             }
 
             is EncryptedScriptRequest -> {

@@ -75,20 +75,6 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
                 }
             }
 
-            is LoginResp -> {
-                userId = msg.k
-                accountSession = msg.p
-
-                // BANNED and BANNED_2
-                if (5 in msg.a || 42 in msg.a) error("This account is banned. Change the IP before making a new one.")
-
-                if (userId <= 0 || accountSession.isEmpty()) {
-                    error("Something went wrong logging in! Try changing the HARDWARE_ID, IP, or account. $msg")
-                }
-
-                ctx.writeAndFlush(RevisionInfoRequest(hardwareId, DBClientData.sharedSecret))
-            }
-
             is RevisionInfoResp -> {
                 if (msg.e == null) {
                     error("Failed to get revision info. The constant or HARDWARE_ID might be incorrect.")
