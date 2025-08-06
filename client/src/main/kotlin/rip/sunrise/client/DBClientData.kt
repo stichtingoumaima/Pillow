@@ -48,7 +48,8 @@ object DBClientData {
 
             val data = extractData(bytes)
             val version = data.first ?: error("Failed to find version!")
-            val sharedSecret = data.second ?: error("Failed to find shared secret!")
+//            val sharedSecret = data.second ?: error("Failed to find shared secret!")
+            val sharedSecret = "4ebbdd702648a0122edbcc"
 
             val clientCache = ClientCache(version, hash, sharedSecret, conn.getHeaderField("etag"))
 
