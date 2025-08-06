@@ -31,7 +31,6 @@ const val REVISION_INFO_JAVAAGENT_CONSTANT = -1640531527
 
 class ServerHandler(private val config: Config, private val http: JarHttpServer) : SimpleChannelInboundHandler<Any>() {
     private val sessions = mutableMapOf<ChannelHandlerContext, Int>()
-    private var packetCounter = 0
 
     override fun channelRead0(ctx: ChannelHandlerContext, msg: Any) {
         println("Got message: $msg")
@@ -57,7 +56,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
                                     SESSION_TOKEN,
                                     USER_ID,
                                     hashSetOf(10)
-                                ).pack(++packetCounter)
+                                ).pack(0) // TODO: Not fully sure if it only increments on send
                             )
                         }
 
@@ -65,7 +64,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
                             val request = unpacker.unpackRevisionInfoRequest()
 
                             val responseChecksum = request.javaagentFlags.hashCode() xor (USER_ID * REVISION_INFO_JAVAAGENT_CONSTANT)
-                            ctx.writeAndFlush(RevisionInfoResponse(config.revisionData, responseChecksum).pack(++packetCounter))
+                            ctx.writeAndFlush(RevisionInfoResponse(config.revisionData, responseChecksum).pack(1))
                         }
                     }
                 }

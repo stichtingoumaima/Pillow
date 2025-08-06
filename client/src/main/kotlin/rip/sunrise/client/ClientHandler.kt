@@ -32,15 +32,13 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
     private lateinit var scriptSession: String
     private var userId: Int = -1
 
-    private var packetCounter = 0
-
     private val queue = ArrayBlockingQueue<Any>(1)
 
     override fun channelActive(ctx: ChannelHandlerContext) {
         println("Open")
 
         // TODO: Use the session token, if possible.
-        ctx.writeAndFlush(LoginRequest(username, password, "", DBClientData.sharedSecret, hardwareId).pack(++packetCounter))
+        ctx.writeAndFlush(LoginRequest(username, password, "", DBClientData.sharedSecret, hardwareId).pack(0)) // TODO: Unsure when it increments
     }
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
@@ -77,7 +75,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
                             error("Something went wrong logging in! Try changing the HARDWARE_ID, IP, or account. $msg")
                         }
 
-                        ctx.writeAndFlush(RevisionInfoRequest(accountSession, DBClientData.hash, "").pack(++packetCounter))
+                        ctx.writeAndFlush(RevisionInfoRequest(accountSession, DBClientData.hash, "").pack(1))
                     }
 
                     REVISION_INFO_RESPONSE_PACKET_ID -> {
