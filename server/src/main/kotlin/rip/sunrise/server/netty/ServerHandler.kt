@@ -5,7 +5,11 @@ import com.google.gson.JsonObject
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import org.dreambot.*
+import org.msgpack.core.MessagePack
 import rip.sunrise.packets.clientbound.*
+import rip.sunrise.packets.msgpack.LOGIN_REQUEST_PACKET_ID
+import rip.sunrise.packets.msgpack.LoginResponse
+import rip.sunrise.packets.msgpack.unpackLoginRequest
 import rip.sunrise.packets.serverbound.*
 import rip.sunrise.server.config.Config
 import rip.sunrise.server.http.JarHttpServer
@@ -28,6 +32,29 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
         when (msg) {
             is String -> {
                 handleJson(ctx, msg)
+            }
+
+            is ByteArray -> {
+                MessagePack.newDefaultUnpacker(msg).use { unpacker ->
+                    val id = unpacker.unpackInt()
+                    println("Got message: $id")
+
+                    when (id) {
+                        LOGIN_REQUEST_PACKET_ID -> {
+                            val login = unpacker.unpackLoginRequest()
+                            println(login)
+                            ctx.writeAndFlush(
+                                LoginResponse(
+                                    login.username,
+                                    ACCOUNT_SESSION_ID,
+                                    SESSION_TOKEN,
+                                    USER_ID,
+                                    hashSetOf(10)
+                                ).pack()
+                            )
+                        }
+                    }
+                }
             }
 
             is LoginRequest -> {

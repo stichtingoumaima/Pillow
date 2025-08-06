@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     implementation(libs.netty)
+    implementation(libs.msgpack)
 }
 
 tasks {

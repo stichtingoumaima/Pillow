@@ -13,6 +13,8 @@ repositories {
 dependencies {
     implementation(libs.netty)
     implementation(libs.gson)
+    implementation(libs.msgpack)
+
     implementation(project(":packets"))
 }
 

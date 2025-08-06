@@ -4,9 +4,13 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
+import org.msgpack.core.MessagePack
 import rip.sunrise.client.config.ScriptConfig
 import rip.sunrise.client.utils.extensions.decryptScript
 import rip.sunrise.packets.clientbound.*
+import rip.sunrise.packets.msgpack.LOGIN_RESPONSE_PACKET_ID
+import rip.sunrise.packets.msgpack.LoginRequest
+import rip.sunrise.packets.msgpack.unpackLoginResponse
 import rip.sunrise.packets.serverbound.*
 import java.net.URI
 import java.net.http.HttpClient
@@ -29,7 +33,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
         println("Open")
 
         // TODO: Use the session token, if possible.
-        ctx.writeAndFlush(LoginRequest(username, password, "", DBClientData.sharedSecret))
+        ctx.writeAndFlush(LoginRequest(0, username, password, "", DBClientData.sharedSecret, hardwareId).pack())
     }
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
@@ -41,6 +45,34 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
         when (msg) {
             is String -> {
                 handleJson(ctx, msg)
+            }
+
+            is ByteArray -> {
+                println(msg.contentToString())
+
+                val unpacker = MessagePack.newDefaultUnpacker(msg)
+
+                val id = unpacker.unpackInt()
+                println("Got packet ID $id")
+
+                when (id) {
+                    LOGIN_RESPONSE_PACKET_ID -> {
+                        val response = unpacker.unpackLoginResponse()
+                        println("Got login response: $response")
+
+                        userId = response.userId
+                        accountSession = response.accountSessionToken
+
+                        // BANNED and BANNED_2
+                        if (5 in response.ranks || 42 in response.ranks) error("This account is banned. Change the IP before making a new one.")
+
+                        if (userId <= 0 || accountSession.isEmpty()) {
+                            error("Something went wrong logging in! Try changing the HARDWARE_ID, IP, or account. $msg")
+                        }
+
+                        ctx.writeAndFlush(RevisionInfoRequest(hardwareId, DBClientData.sharedSecret))
+                    }
+                }
             }
 
             is LoginResp -> {
@@ -145,6 +177,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
             "a" -> {
                 obj.addProperty("r", DBClientData.hash)
                 obj.addProperty("c", hardwareId)
+                obj.addProperty("e", "")
             }
             "b" -> TODO()
             "z" -> TODO()
