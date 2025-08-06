@@ -10,6 +10,7 @@ import rip.sunrise.client.utils.extensions.decryptScript
 import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.msgpack.LOGIN_RESPONSE_PACKET_ID
 import rip.sunrise.packets.msgpack.LoginRequest
+import rip.sunrise.packets.msgpack.Packet
 import rip.sunrise.packets.msgpack.REVISION_INFO_RESPONSE_PACKET_ID
 import rip.sunrise.packets.msgpack.RevisionInfoRequest
 import rip.sunrise.packets.msgpack.unpackLoginResponse
@@ -32,13 +33,15 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
     private lateinit var scriptSession: String
     private var userId: Int = -1
 
+    private var packetCount = 0
+
     private val queue = ArrayBlockingQueue<Any>(1)
 
     override fun channelActive(ctx: ChannelHandlerContext) {
         println("Open")
 
         // TODO: Use the session token, if possible.
-        ctx.writeAndFlush(LoginRequest(username, password, "", DBClientData.sharedSecret, hardwareId).pack(0)) // TODO: Unsure when it increments
+        ctx.sendPacket(LoginRequest(username, password, "", DBClientData.sharedSecret, hardwareId))
     }
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
@@ -75,7 +78,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
                             error("Something went wrong logging in! Try changing the HARDWARE_ID, IP, or account. $msg")
                         }
 
-                        ctx.writeAndFlush(RevisionInfoRequest(accountSession, DBClientData.hash, "").pack(1))
+                        ctx.sendPacket(RevisionInfoRequest(accountSession, DBClientData.hash, ""))
                     }
 
                     REVISION_INFO_RESPONSE_PACKET_ID -> {
@@ -223,6 +226,10 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
         }
 
         println("Done")
+    }
+
+    private fun ChannelHandlerContext.sendPacket(packet: Packet<*>) {
+        writeAndFlush(packet.pack(packetCount++))
     }
 
     private fun sanitizeName(name: String): String {

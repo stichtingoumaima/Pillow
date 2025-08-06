@@ -9,6 +9,7 @@ import org.msgpack.core.MessagePack
 import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.msgpack.LOGIN_REQUEST_PACKET_ID
 import rip.sunrise.packets.msgpack.LoginResponse
+import rip.sunrise.packets.msgpack.Packet
 import rip.sunrise.packets.msgpack.REVISION_INFO_REQUEST_PACKET_ID
 import rip.sunrise.packets.msgpack.RevisionInfoResponse
 import rip.sunrise.packets.msgpack.unpackLoginRequest
@@ -29,8 +30,10 @@ val SCRIPT_IV = ByteArray(16) { 0 }
 
 const val REVISION_INFO_JAVAAGENT_CONSTANT = -1640531527
 
+data class ClientData(var currentScript: Int, var packetCount: Int)
+
 class ServerHandler(private val config: Config, private val http: JarHttpServer) : SimpleChannelInboundHandler<Any>() {
-    private val sessions = mutableMapOf<ChannelHandlerContext, Int>()
+    private val sessions = mutableMapOf<ChannelHandlerContext, ClientData>()
 
     override fun channelRead0(ctx: ChannelHandlerContext, msg: Any) {
         println("Got message: $msg")
@@ -46,17 +49,17 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
                     when (id) {
                         LOGIN_REQUEST_PACKET_ID -> {
-                            sessions[ctx] = -1
+                            sessions.putIfAbsent(ctx, ClientData(-1, 0))
 
                             val request = unpacker.unpackLoginRequest()
-                            ctx.writeAndFlush(
+                            ctx.sendPacket(
                                 LoginResponse(
                                     request.username,
                                     ACCOUNT_SESSION_ID,
                                     SESSION_TOKEN,
                                     USER_ID,
                                     hashSetOf(10)
-                                ).pack(0) // TODO: Not fully sure if it only increments on send
+                                )
                             )
                         }
 
@@ -64,7 +67,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
                             val request = unpacker.unpackRevisionInfoRequest()
 
                             val responseChecksum = request.javaagentFlags.hashCode() xor (USER_ID * REVISION_INFO_JAVAAGENT_CONSTANT)
-                            ctx.writeAndFlush(RevisionInfoResponse(config.revisionData, responseChecksum).pack(1))
+                            ctx.sendPacket(RevisionInfoResponse(config.revisionData, responseChecksum))
                         }
                     }
                 }
@@ -79,7 +82,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
                 val script = config.getScript(msg.f)
 
-                sessions[ctx] = msg.f
+                (sessions[ctx] ?: error("Couldn't find session $ctx")).currentScript = msg.f
                 ctx.writeAndFlush(EncryptedScriptResp("$serverUrl/$endpoint", sanitizeName(script.metadata.m), checksum, Base64.getEncoder().encodeToString(SCRIPT_AES_KEY), -1))
             }
 
@@ -101,7 +104,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
             is GetTotalInstancesRequest -> ctx.writeAndFlush(GetInstancesResp(1))
 
             is ScriptOptionsRequest -> {
-                val scriptId = sessions[ctx] ?: error("Couldn't find session $ctx")
+                val scriptId = sessions[ctx]?.currentScript ?: error("Couldn't find session $ctx")
 
                 val options = config.getScript(scriptId).options
                     .map { it.split("=") }
@@ -130,6 +133,10 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
             "b" -> TODO()
             "z" -> TODO()
         }
+    }
+
+    private fun ChannelHandlerContext.sendPacket(packet: Packet<*>) {
+        writeAndFlush(packet.pack(sessions[this]!!.packetCount++))
     }
 
     private fun encryptOption(value: Int, scriptSessionId: String, userId: Int): Int {
