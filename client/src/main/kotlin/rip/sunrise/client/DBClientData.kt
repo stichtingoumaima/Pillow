@@ -89,8 +89,8 @@ object DBClientData {
                     node.methods.forEach { method ->
                         val putField = method.instructions.filterIsInstance<FieldInsnNode>()
                             .filter { it.opcode == Opcodes.PUTFIELD }
-                            .filter { it.owner == "org/dreambot/b8" }
-                            .firstOrNull { it.name == "r" } ?: return@forEach
+                            .filter { it.owner == "org/dreambot/aQ" }
+                            .firstOrNull { it.name == "p" } ?: return@forEach
 
                         secret = runCatching { invokeStringDecryption(putField.previous) }.getOrNull() ?: return@forEach
                     }
