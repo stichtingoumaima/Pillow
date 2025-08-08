@@ -1,6 +1,8 @@
 package rip.sunrise.server.http
 
 import com.sun.net.httpserver.HttpServer
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import rip.sunrise.server.config.Config
 import rip.sunrise.server.netty.SCRIPT_AES_KEY
 import rip.sunrise.server.netty.SCRIPT_IV
@@ -19,8 +21,6 @@ class JarHttpServer(private val port: Int, val config: Config) {
     fun start() {
         assert(!started)
 
-        println("Starting HTTP Server")
-
         val server = HttpServer.create(InetSocketAddress(port), 0)
         server.createContext("/") { exchange ->
             val path = exchange.requestURI.path.removePrefix("/")
@@ -33,10 +33,15 @@ class JarHttpServer(private val port: Int, val config: Config) {
 
             val bytes = getEncryptedScript(scriptId)
 
-            exchange.sendResponseHeaders(200, bytes.size.toLong())
-            exchange.responseBody.apply {
-                write(bytes)
-                close()
+            runCatching {
+                exchange.sendResponseHeaders(200, bytes.size.toLong())
+                exchange.responseBody.use {
+                    it.write(bytes)
+                }
+
+                logger.info("Sent HTTP response for scriptId {}", scriptId)
+            }.onFailure {
+                logger.error("Failed to send HTTP response for scriptId $scriptId", it)
             }
         }
 
@@ -44,6 +49,8 @@ class JarHttpServer(private val port: Int, val config: Config) {
 
         server.executor = null
         server.start()
+
+        logger.info("Started HTTP server on port {}", port)
     }
 
     fun loadEndpoints() {
@@ -72,5 +79,9 @@ class JarHttpServer(private val port: Int, val config: Config) {
         return path.also {
             endpoints[it] = scriptId
         }
+    }
+
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger("HttpServer")
     }
 }

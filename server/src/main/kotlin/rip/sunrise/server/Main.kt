@@ -4,6 +4,8 @@ import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelOption
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioServerSocketChannel
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import rip.sunrise.server.config.Config
 import rip.sunrise.server.config.ConfigWatcher
 import rip.sunrise.server.http.JarHttpServer
@@ -14,6 +16,8 @@ import kotlin.io.path.Path
 const val HTTP_PORT = 6666
 const val NETTY_PORT = 1337
 const val CONFIG_ENV = "CONFIG_DIR"
+
+val logger: Logger = LoggerFactory.getLogger("Server")
 
 fun main() {
     val configDir = Path(System.getenv(CONFIG_ENV))
@@ -41,8 +45,8 @@ fun main() {
             .childOption(ChannelOption.SO_KEEPALIVE, true)
             .childHandler(initializer)
 
-        println("Starting Netty Server")
         val f = bootstrap.bind(NETTY_PORT).sync()
+        logger.info("Started Netty Server on port {}", NETTY_PORT)
 
         f.channel().closeFuture().sync()
     } finally {

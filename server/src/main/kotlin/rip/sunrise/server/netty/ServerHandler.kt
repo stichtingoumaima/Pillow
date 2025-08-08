@@ -19,6 +19,7 @@ import rip.sunrise.server.config.Config
 import rip.sunrise.server.http.JarHttpServer
 import rip.sunrise.server.utils.extensions.md5sum
 import java.util.Base64
+import rip.sunrise.server.logger
 
 const val ACCOUNT_SESSION_ID = "cMU/vYTQnRyD2cFx1i1J6aa+ZpRIINh5qkMxoTh8XoA"
 const val SCRIPT_SESSION_ID = "dbsVbKA4mRLE4NaOMXCCnvPYEJsNsXdwek6hosbCiQ0"
@@ -36,7 +37,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
     private val sessions = mutableMapOf<ChannelHandlerContext, ClientData>()
 
     override fun channelRead0(ctx: ChannelHandlerContext, msg: Any) {
-        println("Got message: $msg")
+        logger.debug("Got message: {}", msg)
         when (msg) {
             is String -> {
                 handleJson(ctx, msg)
@@ -45,7 +46,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
             is ByteArray -> {
                 MessagePack.newDefaultUnpacker(msg).use { unpacker ->
                     val id = unpacker.unpackByte()
-                    println("Got message: $id")
+                    logger.info("Received Packet ID: $id")
 
                     when (id) {
                         LOGIN_REQUEST_PACKET_ID -> {
@@ -114,7 +115,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
                 ctx.writeAndFlush(ScriptOptionsResp(options))
             }
 
-            else -> error("Unknown packet $msg")
+            else -> logger.error("Unknown packet $msg")
         }
     }
 
@@ -133,6 +134,10 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
             "b" -> TODO()
             "z" -> TODO()
         }
+    }
+
+    override fun channelInactive(ctx: ChannelHandlerContext?) {
+        sessions.remove(ctx)
     }
 
     private fun ChannelHandlerContext.sendPacket(packet: Packet<*>) {

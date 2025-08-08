@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.netty)
     implementation(libs.gson)
     implementation(libs.msgpack)
+    implementation(libs.logback)
 
     implementation(project(":packets"))
 }
