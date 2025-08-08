@@ -70,7 +70,7 @@ class Config(private val configDir: Path) {
                         false
                     )
 
-                    scripts.add(Script(metadata, scriptJar.readBytes(), optionFile.readLines()))
+                    scripts.add(Script(metadata, scriptJar, optionFile.readLines()))
                     logger.debug("Loaded script {}", scriptConfig.name)
                 }.onFailure {
                     logger.error("Failed to load script config from file ${file.name}", it)
@@ -89,7 +89,7 @@ class Config(private val configDir: Path) {
     }
 
     private data class Config(val revisionFile: String, val scriptConfigDir: String, val serverUrl: String)
-    class Script(val metadata: ScriptWrapper, val bytes: ByteArray, val options: List<String>)
+    class Script(val metadata: ScriptWrapper, val scriptJar: File, val options: List<String>)
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger("Config")

@@ -67,16 +67,15 @@ class JarHttpServer(private val port: Int, val config: Config) {
         return entry.key
     }
 
+    // TODO: No caching is also bad, because it's being loaded twice.
     fun getEncryptedScript(scriptId: Int): ByteArray {
-        return encryptedScripts[scriptId] ?: error("Couldn't find encrypted script for script $scriptId")
+        val jarBytes = config.getScript(scriptId).scriptJar.readBytes()
+        return jarBytes.encryptScriptAES(SCRIPT_AES_KEY, SCRIPT_IV)
     }
 
     @OptIn(ExperimentalEncodingApi::class)
     private fun registerEndpoint(scriptId: Int): String {
-        val path = Base64.UrlSafe.encode(Random.nextBytes(16))
-
-        encryptedScripts[scriptId] = config.getScript(scriptId).bytes.encryptScriptAES(SCRIPT_AES_KEY, SCRIPT_IV)
-        return path.also {
+        return Base64.UrlSafe.encode(Random.nextBytes(16)).also {
             endpoints[it] = scriptId
         }
     }
