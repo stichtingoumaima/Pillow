@@ -2,7 +2,8 @@ package rip.sunrise.server
 
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelOption
-import io.netty.channel.nio.NioEventLoopGroup
+import io.netty.channel.MultiThreadIoEventLoopGroup
+import io.netty.channel.nio.NioIoHandler
 import io.netty.channel.socket.nio.NioServerSocketChannel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -36,7 +37,7 @@ fun main() {
 
     val initializer = ServerInitializer(config, http)
 
-    val group = NioEventLoopGroup()
+    val group = MultiThreadIoEventLoopGroup(NioIoHandler.newFactory())
     try {
         val bootstrap = ServerBootstrap()
         bootstrap.group(group)
