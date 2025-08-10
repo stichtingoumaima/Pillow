@@ -94,8 +94,8 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
             is ScriptStartRequest -> ctx.writeAndFlush(ScriptStartResp(false))
 
-            is a5 -> ctx.writeAndFlush(am(6))
-            
+            is a5 -> ctx.writeAndFlush(am(0))
+
             is aY -> ctx.writeAndFlush(bs(USER_ID))
 
             is GetActiveInstancesRequest -> ctx.writeAndFlush(GetInstancesResp(0))
