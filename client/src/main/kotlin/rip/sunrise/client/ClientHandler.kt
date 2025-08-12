@@ -127,11 +127,13 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
             }
 
             is EncryptedScriptResp -> {
+                val request = HttpRequest.newBuilder(URI(msg.w))
+                    .header("If-match", "\"${msg.l}\"")
+                    .header("User-agent", "Java/11.0.25")
+                    .build()
+
                 val encrypted = HttpClient.newHttpClient()
-                    .send(
-                        HttpRequest.newBuilder(URI(msg.w)).build(),
-                        HttpResponse.BodyHandlers.ofInputStream()
-                    )
+                    .send(request, HttpResponse.BodyHandlers.ofInputStream())
                     .body()
                     .readAllBytes()
 
