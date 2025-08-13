@@ -4,15 +4,18 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
+import io.netty.util.concurrent.Promise
 import org.msgpack.core.MessagePack
 import rip.sunrise.client.config.ScriptConfig
 import rip.sunrise.client.utils.extensions.decryptScript
 import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.msgpack.LOGIN_RESPONSE_PACKET_ID
 import rip.sunrise.packets.msgpack.LoginRequest
+import rip.sunrise.packets.msgpack.LoginResponse
 import rip.sunrise.packets.msgpack.Packet
 import rip.sunrise.packets.msgpack.REVISION_INFO_RESPONSE_PACKET_ID
 import rip.sunrise.packets.msgpack.RevisionInfoRequest
+import rip.sunrise.packets.msgpack.RevisionInfoResponse
 import rip.sunrise.packets.msgpack.unpackLoginResponse
 import rip.sunrise.packets.msgpack.unpackRevisionInfoResponse
 import rip.sunrise.packets.serverbound.*
@@ -21,7 +24,8 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.util.*
-import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 import kotlin.io.path.Path
 
@@ -29,19 +33,109 @@ const val REVISION_INFO_JAVAAGENT_CONSTANT = -1640531527
 
 class ClientHandler(val username: String, val password: String, val hardwareId: String) :
     ChannelInboundHandlerAdapter() {
-    private lateinit var accountSession: String
-    private lateinit var scriptSession: String
-    private var userId: Int = -1
+    val pending = ConcurrentHashMap<Class<*>, Promise<Any>>()
 
     private var packetCount = 0
-
-    private val queue = ArrayBlockingQueue<Any>(1)
 
     override fun channelActive(ctx: ChannelHandlerContext) {
         println("Open")
 
-        // TODO: Use the session token, if possible.
-        ctx.sendPacket(LoginRequest(username, password, "", DBClientData.sharedSecret, hardwareId))
+        thread {
+            // TODO: Use the session token, if possible.
+            val loginResponse = ctx.sendPacketAndWait(
+                LoginRequest(
+                    username,
+                    password,
+                    "",
+                    DBClientData.sharedSecret,
+                    hardwareId
+                ),
+                LoginResponse::class.java
+            )
+
+            // BANNED and BANNED_2
+            if (5 in loginResponse.ranks || 42 in loginResponse.ranks) error("This account is banned. Change the IP before making a new one.")
+
+            if (loginResponse.userId <= 0 || loginResponse.accountSessionToken.isEmpty()) {
+                error("Something went wrong logging in! Try changing the HARDWARE_ID, IP, or account. $loginResponse")
+            }
+
+            val accountSession = loginResponse.accountSessionToken
+
+            val revisionResponse = ctx.sendPacketAndWait(
+                RevisionInfoRequest(accountSession, DBClientData.hash, ""),
+                RevisionInfoResponse::class.java
+            )
+            if (revisionResponse.javaagentChecksum xor (loginResponse.userId * REVISION_INFO_JAVAAGENT_CONSTANT) != 0) {
+                println("Failed Javaagent checksum. Constant most likely changed. Latest client will NOT work.")
+            }
+            writeRevisionData(revisionResponse.revisionData)
+            println("Dumped revision info")
+
+            val scripts = ctx.sendPacketAndWait(
+                FreeScriptListRequest(accountSession),
+                ScriptListResp::class.java
+            ).v + ctx.sendPacketAndWait(
+                PaidScriptListRequest(accountSession),
+                ScriptListResp::class.java
+            ).v
+
+            if (scripts.isEmpty()) {
+                ctx.disconnect()
+                return@thread
+            }
+
+            val scriptSessionResp = ctx.sendPacketAndWait(
+                ScriptSessionRequest("$accountSession:MID:$hardwareId"),
+                ScriptSessionResp::class.java
+            )
+            val scriptSession = scriptSessionResp.c ?: error("Failed to get script session. Try again in a few seconds.")
+
+            scripts.forEach { script ->
+                println("Dumping script ${script.m} (ID ${script.x})")
+
+                val encryptedScript = ctx.sendPacketAndWait(
+                    EncryptedScriptRequest(script.x, accountSession, scriptSession),
+                    EncryptedScriptResp::class.java
+                )
+                val bytes = getScriptBytes(encryptedScript)
+
+                val scriptOptions = ctx.sendPacketAndWait(
+                    ScriptOptionsRequest(accountSession, scriptSession),
+                    ScriptOptionsResp::class.java
+                )
+                val options = getScriptOptions(scriptOptions, scriptSession, loginResponse.userId)
+
+                writeScriptData(script, bytes, options)
+            }
+
+            ctx.disconnect()
+        }
+    }
+
+    fun getScriptBytes(msg: EncryptedScriptResp): ByteArray {
+        val request = HttpRequest.newBuilder(URI(msg.w))
+            .header("If-match", "\"${msg.l}\"")
+            .header("User-agent", "Java/11.0.25")
+            .build()
+
+        val encrypted = HttpClient.newHttpClient()
+            .send(request, HttpResponse.BodyHandlers.ofInputStream())
+            .body()
+            .readAllBytes()
+
+        return msg.z?.let {
+            encrypted.decryptScript(Base64.getDecoder().decode(it))
+        } ?: encrypted
+    }
+
+    fun getScriptOptions(msg: ScriptOptionsResp, scriptSession: String, userId: Int): String {
+        if (msg.c.isBlank()) {
+            return ""
+        }
+        return msg.c.trim().split(",").map { p -> p.split("=") }.joinToString(separator = "\n") { (key, value) ->
+            "$key=${value.toInt() xor scriptSession.hashCode() xor userId}"
+        }
     }
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
@@ -51,112 +145,28 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
 
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
         when (msg) {
-            is String -> {
-                handleJson(ctx, msg)
-            }
-
             is ByteArray -> {
-                println(msg.contentToString())
-
                 val unpacker = MessagePack.newDefaultUnpacker(msg)
 
                 val id = unpacker.unpackByte()
                 println("Got packet ID $id")
 
-                when (id) {
-                    LOGIN_RESPONSE_PACKET_ID -> {
-                        val response = unpacker.unpackLoginResponse()
-                        println("Got login response: $response")
-
-                        userId = response.userId
-                        accountSession = response.accountSessionToken
-
-                        // BANNED and BANNED_2
-                        if (5 in response.ranks || 42 in response.ranks) error("This account is banned. Change the IP before making a new one.")
-
-                        if (userId <= 0 || accountSession.isEmpty()) {
-                            error("Something went wrong logging in! Try changing the HARDWARE_ID, IP, or account. $msg")
-                        }
-
-                        ctx.sendPacket(RevisionInfoRequest(accountSession, DBClientData.hash, ""))
-                    }
-
-                    REVISION_INFO_RESPONSE_PACKET_ID -> {
-                        val response = unpacker.unpackRevisionInfoResponse()
-                        assert(response.javaagentChecksum xor (userId * REVISION_INFO_JAVAAGENT_CONSTANT) == 0)
-
-                        writeRevisionData(response.revisionData)
-                        println("Revision data written")
-
-                        ctx.writeAndFlush(ScriptSessionRequest("$accountSession:MID:$hardwareId"))
-                    }
+                val packet = when (id) {
+                    LOGIN_RESPONSE_PACKET_ID -> unpacker.unpackLoginResponse()
+                    REVISION_INFO_RESPONSE_PACKET_ID -> unpacker.unpackRevisionInfoResponse()
+                    else -> error("Unknown msgpack packet ID $id")
                 }
+
+                pending.remove(packet::class.java)?.setSuccess(packet)
             }
 
-            is ScriptSessionResp -> {
-                if (msg.c == null) {
-                    error("Failed to get script session. The HARDWARE_ID might be incorrect.")
-                }
-                scriptSession = msg.c!!
-
-                // NOTE: Change if you want to dump free scripts
-                ctx.writeAndFlush(PaidScriptListRequest(accountSession))
+            is String -> {
+                handleJson(ctx, msg)
             }
 
-            is ScriptListResp -> {
-                println("Scripts owned: ${msg.v.size}")
-                // TODO: This is very ugly
-                thread {
-                    msg.v.forEach { script ->
-                        ctx.writeAndFlush(EncryptedScriptRequest(script.x, accountSession, scriptSession))
-                        // Wait for URL response
-                        while (queue.isEmpty()) { }
-                        val data = queue.poll() as ByteArray
-
-                        ctx.writeAndFlush(ScriptOptionsRequest(accountSession, scriptSession))
-                        while (queue.isEmpty()) { }
-                        val options = queue.poll() as String
-
-                        println("Writing")
-                        writeScriptData(script, data, options)
-                        println("Script written")
-                    }
-
-                    ctx.disconnect()
-                }
+            else -> {
+                pending.remove(msg::class.java)?.setSuccess(msg)
             }
-
-            is EncryptedScriptResp -> {
-                val request = HttpRequest.newBuilder(URI(msg.w))
-                    .header("If-match", "\"${msg.l}\"")
-                    .header("User-agent", "Java/11.0.25")
-                    .build()
-
-                val encrypted = HttpClient.newHttpClient()
-                    .send(request, HttpResponse.BodyHandlers.ofInputStream())
-                    .body()
-                    .readAllBytes()
-
-                val bytes = msg.z?.let {
-                    encrypted.decryptScript(Base64.getDecoder().decode(it))
-                } ?: encrypted
-
-                queue.put(bytes)
-            }
-
-            is ScriptOptionsResp -> {
-                if (msg.c.isBlank()) {
-                    queue.put("")
-                } else {
-                    val options =
-                        msg.c.trim().split(",").map { p -> p.split("=") }.joinToString(separator = "\n") { (key, value) ->
-                            "$key=${value.toInt() xor scriptSession.hashCode() xor userId}"
-                        }
-                    queue.put(options)
-                }
-            }
-
-            else -> println("Unknown message $msg")
         }
     }
 
@@ -226,12 +236,29 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
             it.createNewFile()
             it.writeText(options)
         }
-
-        println("Done")
     }
 
-    private fun ChannelHandlerContext.sendPacket(packet: Packet<*>) {
-        writeAndFlush(packet.pack(packetCount++))
+    private fun <T> ChannelHandlerContext.sendPacketAndWait(
+        packet: Any,
+        responseClass: Class<T>,
+        timeout: Long = 5000L
+    ): T {
+        val promise = channel().eventLoop().newPromise<Any>()
+        pending[responseClass] = promise
+
+        if (packet is Packet<*>) {
+            writeAndFlush(packet.pack(packetCount++))
+        } else {
+            writeAndFlush(packet)
+        }.addListener {
+            if (!it.isSuccess) {
+                pending.remove(responseClass)
+                promise.setFailure(it.cause())
+            }
+        }
+
+        val msg = promise.get(timeout, TimeUnit.MILLISECONDS)
+        return responseClass.cast(msg)
     }
 
     private fun sanitizeName(name: String): String {
