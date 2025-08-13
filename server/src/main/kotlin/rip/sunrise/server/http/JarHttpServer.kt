@@ -56,7 +56,7 @@ class JarHttpServer(private val port: Int, val config: Config) {
     fun loadEndpoints() {
         endpoints.clear()
         config.scripts.forEach { script ->
-            registerEndpoint(script.metadata.d)
+            registerEndpoint(script.metadata.x)
         }
     }
 

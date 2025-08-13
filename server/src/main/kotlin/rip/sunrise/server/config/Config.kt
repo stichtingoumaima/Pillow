@@ -85,7 +85,7 @@ class Config(private val configDir: Path) {
     }
 
     fun getScript(id: Int): Script {
-        return scripts.firstOrNull { it.metadata.d == id } ?: error("Couldn't find script with id $id")
+        return scripts.firstOrNull { it.metadata.x == id } ?: error("Couldn't find script with id $id")
     }
 
     private data class Config(val revisionFile: String, val scriptConfigDir: String, val serverUrl: String)
