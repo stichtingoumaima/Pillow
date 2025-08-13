@@ -3,6 +3,7 @@ package rip.sunrise.server.netty
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.netty.channel.ChannelHandlerContext
+import io.netty.channel.ChannelId
 import io.netty.channel.SimpleChannelInboundHandler
 import org.dreambot.*
 import org.msgpack.core.MessagePack
@@ -34,7 +35,7 @@ const val REVISION_INFO_JAVAAGENT_CONSTANT = -1640531527
 data class ClientData(var currentScript: Int, var packetCount: Int)
 
 class ServerHandler(private val config: Config, private val http: JarHttpServer) : SimpleChannelInboundHandler<Any>() {
-    private val sessions = mutableMapOf<ChannelHandlerContext, ClientData>()
+    private val sessions = mutableMapOf<ChannelId, ClientData>()
 
     override fun channelRead0(ctx: ChannelHandlerContext, msg: Any) {
         logger.debug("Got message: {}", msg)
@@ -50,8 +51,6 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
                     when (id) {
                         LOGIN_REQUEST_PACKET_ID -> {
-                            sessions.putIfAbsent(ctx, ClientData(-1, 0))
-
                             val request = unpacker.unpackLoginRequest()
                             ctx.sendPacket(
                                 LoginResponse(
@@ -83,7 +82,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
 
                 val script = config.getScript(msg.f)
 
-                (sessions[ctx] ?: error("Couldn't find session $ctx")).currentScript = msg.f
+                (sessions[ctx.channel().id()] ?: error("Couldn't find session $ctx")).currentScript = msg.f
                 ctx.writeAndFlush(EncryptedScriptResp("$serverUrl/$endpoint", sanitizeName(script.metadata.m), checksum, Base64.getEncoder().encodeToString(SCRIPT_AES_KEY), -1))
             }
 
@@ -102,7 +101,7 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
             is GetTotalInstancesRequest -> ctx.writeAndFlush(GetInstancesResp(1))
 
             is ScriptOptionsRequest -> {
-                val scriptId = sessions[ctx]?.currentScript ?: error("Couldn't find session $ctx")
+                val scriptId = sessions[ctx.channel().id()]?.currentScript ?: error("Couldn't find session $ctx")
 
                 val options = config.getScript(scriptId).options
                     .map { it.split("=") }
@@ -133,12 +132,16 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
         }
     }
 
-    override fun channelInactive(ctx: ChannelHandlerContext?) {
-        sessions.remove(ctx)
+    override fun channelActive(ctx: ChannelHandlerContext) {
+        sessions[ctx.channel().id()] = ClientData(-1, 0)
+    }
+
+    override fun channelInactive(ctx: ChannelHandlerContext) {
+        sessions.remove(ctx.channel().id())
     }
 
     private fun ChannelHandlerContext.sendPacket(packet: Packet<*>) {
-        writeAndFlush(packet.pack(sessions[this]!!.packetCount++))
+        writeAndFlush(packet.pack(sessions[channel().id()]!!.packetCount++))
     }
 
     private fun encryptOption(value: Int, scriptSessionId: String, userId: Int): Int {
