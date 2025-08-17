@@ -114,13 +114,15 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
     }
 
     fun getScriptBytes(msg: EncryptedScriptResp): ByteArray {
-        val request = HttpRequest.newBuilder(URI(msg.w))
-            .header("If-match", "\"${msg.l}\"")
+        val builder = HttpRequest.newBuilder(URI(msg.w))
             .header("User-agent", "Java/11.0.25")
-            .build()
+
+        msg.l?.let {
+            builder.header("If-match", "\"$it\"")
+        }
 
         val encrypted = HttpClient.newHttpClient()
-            .send(request, HttpResponse.BodyHandlers.ofInputStream())
+            .send(builder.build(), HttpResponse.BodyHandlers.ofInputStream())
             .body()
             .readAllBytes()
 
