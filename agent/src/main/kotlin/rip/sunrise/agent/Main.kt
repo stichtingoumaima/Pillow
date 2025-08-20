@@ -11,6 +11,7 @@ import rip.sunrise.injectapi.hooks.inject.modes.ReturnInjection
 import rip.sunrise.injectapi.managers.HookManager
 import rip.sunrise.injectapi.utils.setAccessibleUnsafe
 import java.lang.instrument.Instrumentation
+import java.net.Inet4Address
 import java.net.Inet6Address
 import java.net.InetAddress
 import java.net.InetSocketAddress
@@ -134,6 +135,17 @@ fun premain(args: String?, inst: Instrumentation) {
         }
     })
 
+    HookManager.addHook(InjectHook(
+        HeadInjection(),
+        Inet4Address::class.java,
+        TargetMethod("isLoopbackAddress", "()Z"),
+        listOf(CapturedArgument(Opcodes.ALOAD, 0))
+    ) { ctx: Context, instance: InetAddress ->
+        // NOTE: Only needed for localhost
+        if (instance.hostName == SERVER_HOST) {
+            ctx.setReturnValue(false)
+        }
+    })
     HookManager.addHook(InjectHook(
         HeadInjection(),
         Inet6Address::class.java,
