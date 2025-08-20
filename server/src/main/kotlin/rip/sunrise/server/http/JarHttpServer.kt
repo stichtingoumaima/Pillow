@@ -14,7 +14,6 @@ import kotlin.random.Random
 
 class JarHttpServer(private val port: Int, val config: Config) {
     private val endpoints = mutableMapOf<String, Int>()
-    private val encryptedScripts = mutableMapOf<Int, ByteArray>()
 
     private val started = false
 

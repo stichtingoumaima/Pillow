@@ -21,8 +21,8 @@ class ServerInitializer(private val config: Config, private val http: JarHttpSer
 
         pipeline.addLast(createSSLContext().newHandler(ch.alloc()))
 
-        pipeline.addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.ZLIB));
-        pipeline.addLast(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.ZLIB));
+        pipeline.addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.ZLIB))
+        pipeline.addLast(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.ZLIB, 0))
 
         pipeline.addLast(LengthFieldBasedFrameDecoder(Int.MAX_VALUE, 0, 4, 0, 4))
         pipeline.addLast(LengthFieldPrepender(4))

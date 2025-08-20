@@ -4,7 +4,6 @@ import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-import kotlin.random.Random
 
 fun ByteArray.md5sum(): ByteArray {
     val md = MessageDigest.getInstance("MD5")

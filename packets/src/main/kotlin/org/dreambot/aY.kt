@@ -4,7 +4,8 @@ import java.io.Serializable
 
 /**
  * UserIdRequest.
- * Left obfuscated because it makes no sense for this to exist - it might evolve. (see [rip.sunrise.packets.clientbound.LoginResp])
+ * Left obfuscated because it makes no sense for this to exist - it might evolve.
+ * (see [rip.sunrise.packets.msgpack.LoginResponse])
  *
  * e -> account session token
  */
