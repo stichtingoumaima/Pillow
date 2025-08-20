@@ -15,7 +15,7 @@ import kotlin.concurrent.thread
 import kotlin.io.path.Path
 
 const val HTTP_PORT = 6666
-const val NETTY_PORT = 1337
+const val NETTY_PORT = 43831
 const val CONFIG_ENV = "CONFIG_DIR"
 
 val logger: Logger = LoggerFactory.getLogger("Server")
