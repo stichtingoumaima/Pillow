@@ -200,7 +200,7 @@ fun hookScriptManager() {
     val clazz = Class.forName("org.dreambot.api.script.ScriptManager")
     HookManager.addHook(
         InjectHook(
-            HeadInjection(),
+            ReturnInjection(),
             clazz,
             TargetMethod("hasPurchasedScript", "(I)Z"),
             listOf(CapturedArgument(Opcodes.ILOAD, 1))
@@ -214,7 +214,7 @@ fun hookScriptManager() {
 
     HookManager.addHook(
         InjectHook(
-            HeadInjection(),
+            ReturnInjection(),
             clazz,
             TargetMethod("hasPremiumScript", "(I)Z"),
             listOf(CapturedArgument(Opcodes.ILOAD, 1))
@@ -228,7 +228,7 @@ fun hookScriptManager() {
 
     HookManager.addHook(
         InjectHook(
-            HeadInjection(),
+            ReturnInjection(),
             clazz,
             TargetMethod("hasSDNScript", "(I)Z"),
             listOf(CapturedArgument(Opcodes.ILOAD, 1))
