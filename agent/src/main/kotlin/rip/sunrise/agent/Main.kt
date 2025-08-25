@@ -30,6 +30,9 @@ val SSL_CERT_FINGERPRINT = "a7ef2a6effc7df71abe00d522a3122fe150b9bdf95d604273733
 const val DREAMBOT_DOMAIN = "cdn.dreambot.org"
 const val DREAMBOT_PORT = 43831
 
+// NOTE: They currently don't use CloudFlare, and the IP is static.
+val DREAMBOT_ADDRESS = InetAddress.getByName(DREAMBOT_DOMAIN)
+
 const val ANTISPOOF_PRODUCT_CONSTANT = 6925123
 const val ANTISPOOF_PREMIUM_CONSTANT = 5136948
 const val ANTISPOOF_SDN_CONSTANT = 2562934
@@ -123,15 +126,31 @@ fun premain(args: String?, inst: Instrumentation) {
 
     HookManager.addHook(InjectHook(
         HeadInjection(),
-        String::class.java,
-        TargetMethod("equals", "(Ljava/lang/Object;)Z"),
-        listOf(CapturedArgument(Opcodes.ALOAD, 0), CapturedArgument(Opcodes.ALOAD, 1))
-    ) { ctx: Context, instance: String, other: Any? ->
-        // NOTE: getAddress().getHostAddress() but dumber
-        // NOTE: How much are we betting 3.30.33 will have a check against this?
-        if (instance == "143.198.12.24" || other == "143.198.12.24") {
-            log("[EQUALS] $instance - $other")
-            ctx.setReturnValue(true)
+        Inet4Address::class.java,
+        TargetMethod("getHostAddress", "()Ljava/lang/String;"),
+        listOf(CapturedArgument(Opcodes.ALOAD, 0))
+    ) { ctx: Context, instance: InetAddress ->
+        val caller = Throwable().stackTrace[2].className
+
+        if (instance.hostName == SERVER_HOST && caller.startsWith("org.dreambot")) {
+            ctx.setReturnValue(DREAMBOT_ADDRESS.hostAddress)
+        }
+    })
+
+    HookManager.addHook(InjectHook(
+        HeadInjection(),
+        Inet6Address::class.java,
+        TargetMethod("getHostAddress", "()Ljava/lang/String;"),
+        listOf(CapturedArgument(Opcodes.ALOAD, 0))
+    ) { ctx: Context, instance: InetAddress ->
+        println(instance.hostAddress)
+        println(instance.hostName)
+
+        val caller = Throwable().stackTrace[2].className
+        println(caller)
+
+        if (instance.hostName == SERVER_HOST && caller.startsWith("org.dreambot")) {
+            ctx.setReturnValue(DREAMBOT_ADDRESS.hostAddress)
         }
     })
 
@@ -169,7 +188,7 @@ fun premain(args: String?, inst: Instrumentation) {
             //  Get the caller in a better way: 0 is lambda, 1 is hooked method,
             //  2 is caller (invoke handler), 3 is Method.invoke, 4 is actual caller
             val caller = Throwable().stackTrace[4].className
-            if (instance.host == HTTP_HOST && caller.startsWith("org.dreambot")) {
+            if (instance.host == HTTP_HOST && caller.startsWith("org.dreambot.2BX")) {
                 log("Spoofing script host!")
                 ctx.setReturnValue("cloudflarestorage.com")
             }
