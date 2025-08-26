@@ -37,9 +37,9 @@ fun premain(args: String?, inst: Instrumentation) {
         HeadInjection(),
         SSLContext::class.java,
         TargetMethod("createSSLEngine", "(Ljava/lang/String;I)Ljavax/net/ssl/SSLEngine;"),
-        listOf(CapturedArgument(Opcodes.ALOAD, 1)),
-    ) { ctx: Context, peerHost: String ->
-        if (peerHost != DREAMBOT_DOMAIN) return@InjectHook
+        listOf(CapturedArgument(Opcodes.ALOAD, 1), CapturedArgument(Opcodes.ILOAD, 2)),
+    ) { ctx: Context, peerHost: String, peerPort: Int ->
+        if (peerHost != DREAMBOT_DOMAIN || peerPort != DREAMBOT_PORT) return@InjectHook
 
         val context = SSLContext.getInstance("TLS")
         context.init(null, arrayOf(GullibleTrustManager), SecureRandom())
