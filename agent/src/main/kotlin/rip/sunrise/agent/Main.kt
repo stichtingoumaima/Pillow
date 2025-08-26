@@ -7,15 +7,13 @@ import rip.sunrise.injectapi.hooks.CapturedArgument
 import rip.sunrise.injectapi.hooks.TargetMethod
 import rip.sunrise.injectapi.hooks.inject.InjectHook
 import rip.sunrise.injectapi.hooks.inject.modes.HeadInjection
-import rip.sunrise.injectapi.hooks.inject.modes.ReturnInjection
 import rip.sunrise.injectapi.managers.HookManager
 import rip.sunrise.injectapi.utils.setAccessibleUnsafe
 import java.lang.instrument.Instrumentation
-import java.net.Inet4Address
-import java.net.Inet6Address
-import java.net.InetAddress
 import java.net.InetSocketAddress
+import java.net.SocketAddress
 import java.net.URL
+import java.nio.channels.SocketChannel
 import java.security.MessageDigest
 import java.security.SecureRandom
 import javax.net.ssl.SSLContext
@@ -30,41 +28,11 @@ val SSL_CERT_FINGERPRINT = "a7ef2a6effc7df71abe00d522a3122fe150b9bdf95d604273733
 const val DREAMBOT_DOMAIN = "cdn.dreambot.org"
 const val DREAMBOT_PORT = 43831
 
-// NOTE: They currently don't use CloudFlare, and the IP is static.
-val DREAMBOT_ADDRESS = InetAddress.getByName(DREAMBOT_DOMAIN)
-
 const val ANTISPOOF_PRODUCT_CONSTANT = 6925123
 const val ANTISPOOF_PREMIUM_CONSTANT = 5136948
 const val ANTISPOOF_SDN_CONSTANT = 2562934
 
 fun premain(args: String?, inst: Instrumentation) {
-    // TODO: Bad workaround against constructor hooking
-    val javaModule = ClassLoader::class.java.module
-    Module::class.java.getDeclaredMethod(
-        "implAddExportsOrOpens",
-        String::class.java,
-        Module::class.java,
-        Boolean::class.java,
-        Boolean::class.java
-    ).also {
-        it.setAccessibleUnsafe(true)
-    }.invoke(javaModule, "java.net", InjectApi::class.java.module, true, true)
-
-    HookManager.addHook(InjectHook(
-        ReturnInjection(),
-        InetSocketAddress::class.java,
-        TargetMethod("<init>", "(Ljava/lang/String;I)V"),
-        listOf(CapturedArgument(Opcodes.ALOAD, 0), CapturedArgument(Opcodes.ALOAD, 1), CapturedArgument(Opcodes.ILOAD, 2)),
-    ) { _: Context, instance: InetSocketAddress, name: String, port: Int ->
-        if (name == DREAMBOT_DOMAIN && port == DREAMBOT_PORT) {
-            val holderField = InetSocketAddress::class.java.getDeclaredField("holder").also { it.isAccessible = true }
-            val new = InetSocketAddress(SERVER_HOST, SERVER_PORT)
-
-            log("Spoofing holder")
-            holderField.set(instance, holderField.get(new))
-        }
-    })
-
     HookManager.addHook(InjectHook(
         HeadInjection(),
         SSLContext::class.java,
@@ -98,83 +66,33 @@ fun premain(args: String?, inst: Instrumentation) {
         }
     })
 
-    HookManager.addHook(InjectHook(
-        HeadInjection(),
-        InetSocketAddress::class.java,
-        TargetMethod("getHostString", "()Ljava/lang/String;"),
-        listOf(CapturedArgument(Opcodes.ALOAD, 0))
-    ) { ctx: Context, instance: InetSocketAddress ->
-        log("[HOST STRING] ${instance.hostString}")
-        if (instance.hostString == SERVER_HOST) {
-            log("Spoofing Host String")
-            ctx.setReturnValue("cdn.dreambot.org")
-        }
-    })
+    val javaModule = ClassLoader::class.java.module
+    Module::class.java.getDeclaredMethod(
+        "implAddExportsOrOpens",
+        String::class.java,
+        Module::class.java,
+        Boolean::class.java,
+        Boolean::class.java
+    ).also {
+        it.setAccessibleUnsafe(true)
+    }.invoke(javaModule, "sun.nio.ch", InjectApi::class.java.module, true, true)
 
     HookManager.addHook(InjectHook(
         HeadInjection(),
-        InetSocketAddress::class.java,
-        TargetMethod("getHostName", "()Ljava/lang/String;"),
-        listOf(CapturedArgument(Opcodes.ALOAD, 0))
-    ) { ctx: Context, instance: InetSocketAddress ->
-        log("[HOST NAME] ${instance.hostName}")
-        if (instance.hostName == SERVER_HOST) {
-            log("Spoofing Host name")
-            ctx.setReturnValue("cdn.dreambot.org")
-        }
-    })
+        Class.forName("sun.nio.ch.SocketChannelImpl"),
+        TargetMethod("connect", "(Ljava/net/SocketAddress;)Z"),
+        listOf(CapturedArgument(Opcodes.ALOAD, 0), CapturedArgument(Opcodes.ALOAD, 1))
+    ) { ctx: Context, instance: SocketChannel, remote: SocketAddress ->
+        if (remote !is InetSocketAddress || remote.hostName != DREAMBOT_DOMAIN) return@InjectHook
 
-    HookManager.addHook(InjectHook(
-        HeadInjection(),
-        Inet4Address::class.java,
-        TargetMethod("getHostAddress", "()Ljava/lang/String;"),
-        listOf(CapturedArgument(Opcodes.ALOAD, 0))
-    ) { ctx: Context, instance: InetAddress ->
-        val caller = Throwable().stackTrace[2].className
+        println("Redirecting connection from ${remote.hostName}:${remote.port} to $SERVER_HOST:$SERVER_PORT!")
 
-        if (instance.hostName == SERVER_HOST && caller.startsWith("org.dreambot")) {
-            ctx.setReturnValue(DREAMBOT_ADDRESS.hostAddress)
-        }
-    })
+        val returnValue = instance.connect(InetSocketAddress(SERVER_HOST, SERVER_PORT))
 
-    HookManager.addHook(InjectHook(
-        HeadInjection(),
-        Inet6Address::class.java,
-        TargetMethod("getHostAddress", "()Ljava/lang/String;"),
-        listOf(CapturedArgument(Opcodes.ALOAD, 0))
-    ) { ctx: Context, instance: InetAddress ->
-        println(instance.hostAddress)
-        println(instance.hostName)
+        val remoteAddressField = instance::class.java.getDeclaredField("remoteAddress").also { it.isAccessible = true }
+        remoteAddressField.set(instance, remote)
 
-        val caller = Throwable().stackTrace[2].className
-        println(caller)
-
-        if (instance.hostName == SERVER_HOST && caller.startsWith("org.dreambot")) {
-            ctx.setReturnValue(DREAMBOT_ADDRESS.hostAddress)
-        }
-    })
-
-    HookManager.addHook(InjectHook(
-        HeadInjection(),
-        Inet4Address::class.java,
-        TargetMethod("isLoopbackAddress", "()Z"),
-        listOf(CapturedArgument(Opcodes.ALOAD, 0))
-    ) { ctx: Context, instance: InetAddress ->
-        // NOTE: Only needed for localhost
-        if (instance.hostName == SERVER_HOST) {
-            ctx.setReturnValue(false)
-        }
-    })
-    HookManager.addHook(InjectHook(
-        HeadInjection(),
-        Inet6Address::class.java,
-        TargetMethod("isLoopbackAddress", "()Z"),
-        listOf(CapturedArgument(Opcodes.ALOAD, 0))
-    ) { ctx: Context, instance: InetAddress ->
-        // NOTE: Only needed for localhost
-        if (instance.hostName == SERVER_HOST) {
-            ctx.setReturnValue(false)
-        }
+        ctx.setReturnValue(returnValue)
     })
 
     HookManager.addHook(
