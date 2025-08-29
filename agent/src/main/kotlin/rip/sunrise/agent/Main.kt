@@ -130,7 +130,7 @@ fun premain(args: String?, inst: Instrumentation) {
 
     hookScriptManager()
 
-    InjectApi.transform(inst)
+    InjectApi.transform(InstrumentationBackend(inst))
 }
 
 fun hookScriptManager() {
