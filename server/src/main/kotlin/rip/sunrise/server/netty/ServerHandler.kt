@@ -25,6 +25,7 @@ import rip.sunrise.server.logger
 const val ACCOUNT_SESSION_ID = "cMU/vYTQnRyD2cFx1i1J6aa+ZpRIINh5qkMxoTh8XoA"
 const val SCRIPT_SESSION_ID = "dbsVbKA4mRLE4NaOMXCCnvPYEJsNsXdwek6hosbCiQ0"
 const val SESSION_TOKEN = "DHGbNt9CZ2v6yNSPvsEq/zv/toLQmA7ET4Kdvq2xeZVol8UMMSyHk0QCyfyRHPf7hhvGvO/CA7M="
+const val AUTHENTICATION_CODE = "cZVrdjeOPvd1Ozh1sfzb0z7imnearVJs1CE+Wm12mBV+ekWVOeNVFOz42ZXqYMhmDYa48mebi4DRMOqH8mc="
 const val USER_ID = 1
 
 val SCRIPT_AES_KEY = ByteArray(32) { 0 }
@@ -92,6 +93,8 @@ class ServerHandler(private val config: Config, private val http: JarHttpServer)
             is ScriptSessionRequest -> ctx.writeAndFlush(ScriptSessionResp(0, SCRIPT_SESSION_ID))
 
             is ScriptStartRequest -> ctx.writeAndFlush(ScriptStartResp(false))
+
+            is AuthenticationCodeRequest -> ctx.writeAndFlush(AuthenticationCodeResp(AUTHENTICATION_CODE))
 
             is a5 -> ctx.writeAndFlush(am(0))
 

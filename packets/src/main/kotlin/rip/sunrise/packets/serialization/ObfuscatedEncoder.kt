@@ -22,6 +22,7 @@ object ObfuscatedEncoder : MessageToByteEncoder<Serializable>() {
         ScriptOptionsResp::class   to "bd",
         EncryptedScriptResp::class to "aJ",
         GetInstancesResp::class    to "ah",
+        AuthenticationCodeResp::class to "bR",
 
         GetActiveInstancesRequest::class to "bC",
         GetTotalInstancesRequest::class to "aZ",
@@ -30,6 +31,7 @@ object ObfuscatedEncoder : MessageToByteEncoder<Serializable>() {
         ScriptSessionRequest::class to "ba",
         ScriptOptionsRequest::class to "a1",
         EncryptedScriptRequest::class to "B5",
+        AuthenticationCodeRequest::class to "bG"
     ).map { (k, v) -> k.java.name to "org.dreambot.$v" }.toMap()
 
     override fun encode(ctx: ChannelHandlerContext, msg: Serializable, out: ByteBuf) {
