@@ -15,6 +15,9 @@ import io.netty.handler.codec.serialization.ObjectDecoder
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import io.netty.handler.timeout.ReadTimeoutHandler
+import rip.sunrise.client.upstream.User
+import rip.sunrise.client.upstream.UserStorage
+import rip.sunrise.client.upstream.generateHardwareId
 import rip.sunrise.packets.serialization.ObfuscatedClassResolver
 import rip.sunrise.packets.serialization.ObfuscatedEncoder
 
@@ -32,13 +35,15 @@ fun main() {
         error("No password set!")
     }
 
+    val user = UserStorage.getUser(username) ?: User(username, generateHardwareId(), "")
+
     val group = MultiThreadIoEventLoopGroup(NioIoHandler.newFactory())
     try {
         val bootstrap = Bootstrap()
         bootstrap.group(group)
             .channel(NioSocketChannel::class.java)
             .option(ChannelOption.SO_KEEPALIVE, true)
-            .handler(ClientInitializer(username, password, UserAnonymization.getHwid(username)))
+            .handler(ClientInitializer(user, password))
 
         println("Connecting to DreamBot servers.")
         val f = bootstrap.connect("cdn.dreambot.org", 43831).sync()
@@ -49,7 +54,7 @@ fun main() {
     }
 }
 
-class ClientInitializer(val username: String, val password: String, val hardwareId: String) : ChannelInitializer<SocketChannel>() {
+class ClientInitializer(val user: User, val password: String) : ChannelInitializer<SocketChannel>() {
     override fun initChannel(ch: SocketChannel) {
         val pipeline = ch.pipeline()
 
@@ -66,6 +71,6 @@ class ClientInitializer(val username: String, val password: String, val hardware
 
         pipeline.addLast(ReadTimeoutHandler(600))
 
-        pipeline.addLast(ClientHandler(username, password, hardwareId))
+        pipeline.addLast(ClientHandler(user, password))
     }
 }

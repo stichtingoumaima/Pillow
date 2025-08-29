@@ -7,6 +7,8 @@ import io.netty.channel.ChannelInboundHandlerAdapter
 import io.netty.util.concurrent.Promise
 import org.msgpack.core.MessagePack
 import rip.sunrise.client.config.ScriptConfig
+import rip.sunrise.client.upstream.User
+import rip.sunrise.client.upstream.UserStorage
 import rip.sunrise.client.utils.extensions.decryptScript
 import rip.sunrise.packets.clientbound.*
 import rip.sunrise.packets.msgpack.LOGIN_RESPONSE_PACKET_ID
@@ -31,7 +33,7 @@ import kotlin.io.path.Path
 
 const val REVISION_INFO_JAVAAGENT_CONSTANT = -1640531527
 
-class ClientHandler(val username: String, val password: String, val hardwareId: String) :
+class ClientHandler(val user: User, val password: String) :
     ChannelInboundHandlerAdapter() {
     val pending = ConcurrentHashMap<Class<*>, Promise<Any>>()
 
@@ -44,11 +46,11 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
             // TODO: Use the session token, if possible.
             val loginResponse = ctx.sendPacketAndWait(
                 LoginRequest(
-                    username,
+                    user.name,
                     password,
-                    "",
+                    user.sessionId,
                     DBClientData.sharedSecret,
-                    hardwareId
+                    user.hardwareId
                 ),
                 LoginResponse::class.java
             )
@@ -59,6 +61,9 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
             if (loginResponse.userId <= 0 || loginResponse.accountSessionToken.isEmpty()) {
                 error("Something went wrong logging in! Try changing the HARDWARE_ID, IP, or account. $loginResponse")
             }
+
+            user.sessionId = loginResponse.sessionId
+            UserStorage.addUser(user)
 
             val accountSession = loginResponse.accountSessionToken
 
@@ -86,7 +91,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
             }
 
             val scriptSessionResp = ctx.sendPacketAndWait(
-                ScriptSessionRequest("$accountSession:MID:$hardwareId"),
+                ScriptSessionRequest("$accountSession:MID:${user.hardwareId}"),
                 ScriptSessionResp::class.java
             )
             val scriptSession = scriptSessionResp.c ?: error("Failed to get script session. Try again in a few seconds.")
@@ -184,7 +189,7 @@ class ClientHandler(val username: String, val password: String, val hardwareId: 
             // Sent when requesting revision info.
             "a" -> {
                 obj.addProperty("r", DBClientData.hash)
-                obj.addProperty("c", hardwareId)
+                obj.addProperty("c", user.hardwareId)
                 obj.addProperty("e", "")
             }
             "b" -> TODO()
