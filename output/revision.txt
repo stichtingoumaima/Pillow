@@ -1,0 +1,1229 @@
+@Revision identified as: 232
+Revision.betaRequirement revision 3.30.32
+Revision.clientRequirement revision 3.30.32
+
+@Gamepack identified as: 527ddda38c3ddceda3f026060949f63b
+
+@GamepackSize identified as: 2574901
+
+@RuneLite identified as: injector
+RuneLite.clientFirstStack runelite client18126wi
+RuneLite.clientSecondStack runelite client50773cp
+RuneLite.startStack runelite nrc.RuneLite299start
+RuneLite.mainStack runelite nrc.RuneLite276main
+RuneLite.launcherStack runelite nrl.ReflectionLa+64lambda$launc+
+RuneLite.gitCommit runelite 5e7736f
+RuneLite.callbackHash runelite 1152
+RuneLite.threadString runelite jl.ThreadUnknown_Source+
+RuneLite.javaString runelite 11.0.27
+RuneLite.stack (J)Ljava/lang/String; S client wi 0L
+
+@AbstractSocket identified as: tl
+#Refactored 0 out of 0 fields!
+AbstractSocket.close (I)V L tl ah 115773402
+#Refactored 1 out of 1 methods!
+
+@Actor identified as: ca
+Actor.animationPose Lrk; L ca co
+Actor.animationPrimary Lrk; L ca ca
+Actor.combatTime I L ca be 383253283 688327819
+Actor.healthBars Lqm; L ca bc
+Actor.hitCycles [I L ca bx
+Actor.hitDamages [I L ca bv
+Actor.hitSplatIds [I L ca bl
+Actor.hitSplatSpecials [I L ca bf
+Actor.hitTypes [I L ca bq
+Actor.index I L ca bs -890084545 876547263
+Actor.interacting I L ca cw 1760991351 -1356414649
+Actor.localX I L ca bu -678502515 -1582728379
+Actor.localY I L ca bp 502098815 554587263
+Actor.message Ljava/lang/String; L ca cv
+Actor.orientation I L ca dp -77613671 87084713
+Actor.queueSize I L ca df 606175875 1428708395
+Actor.queueTraversed [Lke; L ca dn
+Actor.queueX [I L ca dw
+Actor.queueY [I L ca de
+Actor.smoothOrientation I L ca bz 1043778481 119446865
+Actor.spotAnimationCount I L ca dj 621650187 506274467
+Actor.spotAnimationList Lqr; L ca cf
+#Refactored 22 out of 22 fields!
+Actor.addHitSplat (IIIIIII)V L ca cf 838758847
+Actor.addSpotAnimation (IIIIB)V L ca da 2
+#Refactored 2 out of 2 methods!
+
+@AnimatedObject identified as: ci
+AnimatedObject.animation Lrk; L ci ap
+AnimatedObject.animationDelay I L ci aj -1451529473 80450815
+AnimatedObject.animationFrame I L ci aj -1451529473 80450815
+AnimatedObject.clickType I L ci ac 1370420631 456841767
+AnimatedObject.id I L ci ab 117616549 -4153299
+AnimatedObject.orientation I L ci av 533161513 -1179412967
+AnimatedObject.plane I L ci au -1169014325 -344597533
+AnimatedObject.x I L ci as -723908345 -195488585
+AnimatedObject.y I L ci ah -202053319 267597065
+#Refactored 9 out of 9 fields!
+#Refactored 0 out of 0 methods!
+
+@Animation identified as: rk
+Animation.actor Lca; L rk db_actor
+Animation.frameOne I L rk au 1890024059 -728804173
+Animation.id I L rk ab 1901052507 1577295315
+Animation.sequence Liz; L rk ac
+#Refactored 2 out of 3 fields!
+#Refactored 0 out of 0 methods!
+
+@AnimationFrame identified as: iw
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@AnimationFrameGroup identified as: in
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@Associate identified as: to
+Associate.rank I L to ah 1073770257 23224817
+Associate.something I L to as -1604326975 -642570687
+Associate.world I L to au 372329187 -890484021
+#Refactored 3 out of 3 fields!
+#Refactored 0 out of 0 methods!
+
+@BoundaryObject identified as: jp
+BoundaryObject.backUpOrientation I L jp ap -1173420951 165071833
+BoundaryObject.backUpRenderable Liq; L jp ab
+BoundaryObject.flags I L jp am 1753440193 1490071617
+BoundaryObject.id J L jp ac -9114907871266542199L -4126884951132628807L
+BoundaryObject.orientation I L jp ah 2071044347 923757107
+BoundaryObject.plane I L jp av 113748867 1512389419
+BoundaryObject.renderable Liq; L jp al
+BoundaryObject.x I L jp au -738263123 2116729893
+BoundaryObject.y I L jp as -255134201 -959146057
+#Refactored 9 out of 9 fields!
+#Refactored 0 out of 0 methods!
+
+@ByteBufferProvider identified as: om
+#Refactored 0 out of 0 fields!
+ByteBufferProvider.allocate ([BI)V L om au -223658194
+ByteBufferProvider.get (I)[B L om av 93826609
+#Refactored 2 out of 2 methods!
+
+@Cache identified as: md
+Cache.cacheNode Lux; L md al
+Cache.hashTable Lqr; L md av
+Cache.queue Lqg; L md au
+Cache.remaining I L md ac 1 1
+Cache.size I L md ab 1 1
+#Refactored 5 out of 5 fields!
+Cache.add (Lux;J)V L md ac
+Cache.clear ()V L md av
+Cache.get (J)Lux; L md al
+Cache.remove (J)V L md ab
+#Refactored 4 out of 4 methods!
+
+@CacheNode identified as: ux
+CacheNode.id J L ux ek 1 1
+CacheNode.next Lux; L ux ev
+CacheNode.previous Lux; L ux ex
+#Refactored 3 out of 3 fields!
+CacheNode.unlink ()V L ux kk
+#Refactored 1 out of 1 methods!
+
+@Canvas identified as: af
+Canvas.component Ljava/awt/Component; L af al
+#Refactored 1 out of 1 fields!
+Canvas.paint (Ljava/awt/Graphics;)V L af paint
+Canvas.update (Ljava/awt/Graphics;)V L af update
+#Refactored 2 out of 2 methods!
+
+@Clan identified as: gw
+Clan.memberList Ljava/util/List; L gw al
+Clan.name Ljava/lang/String; L gw ac
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@ClanChatHandler identified as: sq
+ClanChatHandler.client Lsx; L sq ac
+ClanChatHandler.count I L sq ap 734901931 1559532547
+ClanChatHandler.myRank I L sq ah 1 1
+ClanChatHandler.name Ljava/lang/String; L sq av
+ClanChatHandler.nameLimiter Lvy; L sq ab
+ClanChatHandler.owner Ljava/lang/String; L sq au
+#Refactored 6 out of 6 fields!
+#Refactored 0 out of 0 methods!
+
+@ClanChatMember identified as: ts
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@ClanMember identified as: fv
+ClanMember.nameComposite Lxf; L fv ac
+ClanMember.rank B L fv al
+ClanMember.world I L fv ab -1315999179 -859713507
+#Refactored 3 out of 3 fields!
+#Refactored 0 out of 0 methods!
+
+@ClassData identified as: bf
+ClassData.byteArray [[[B L bf ap
+ClassData.exceptionValues [I L bf av
+ClassData.fields [Ljava/lang/reflect/Field; L bf au
+ClassData.methods [Ljava/lang/reflect/Method; L bf ah
+ClassData.requestTypes [I L bf ac
+ClassData.setValues [I L bf as
+ClassData.size I L bf ab 1586039129 -1899188503
+ClassData.someOffsetMaybe I L bf al -1311560651 -642267619
+#Refactored 8 out of 8 fields!
+ClassData.getClass (Ljava/lang/String;I)Ljava/lang/Class; S ee av 707186061
+ClassData.getClassData (Lwj;IB)V S kq ac 111
+#Refactored 2 out of 2 methods!
+
+@Client identified as: client
+Client.accessToken Ljava/lang/String; S dj of
+Client.accountStatus I S by bt -655582147 446421781
+Client.cacheItemDef Lmd; S id ar
+Client.cacheOldschoolLiveFolder Ljava/io/File; S kd ab
+Client.cacheVarBitDef Lmd; S hx ac
+Client.cameraPitch I S hv mv -406904939 -680578115
+Client.cameraX I S qq lg 1252753073 -1880487343
+Client.cameraY I S cc mo -232168375 519556601
+Client.cameraYaw I S bi mm 388119823 1968509423
+Client.cameraZ I S lu mn -562752735 -620482335
+Client.characterId Ljava/lang/String; S eh ou
+Client.clanChatHandler Lsq; S nq hs
+Client.clanProvider Lgw; S uq hk
+Client.clanProviderArray [Lgw; S client hb
+Client.clientType BROKEN
+Client.clientTypeVal BROKEN 4
+Client.crosshairColor I S client rz 1498558629 1855076141
+Client.currentScene Ldj; S ap fj
+Client.currentWorld I S client fw 257721411 -2044139413
+Client.destinationX I S client ug -1105109915 -646711955
+Client.destinationY I S client ut -210974483 -520301339
+Client.displayName Ljava/lang/String; S by cf
+Client.experience [I S client gc
+Client.fps I S client av 1745632755 39101243
+Client.gameCycle I S client fh 939764361 -572593223
+Client.gameDrawingMode I S client un 2066432327 -1140189065
+Client.gameState I S client fy 1500592321 -1095280831
+Client.gameTick I S client jj -1791712417 1552316575
+Client.grandExchangeItems [Lqz; S client ik
+Client.hintArrowNPCIndex I S client oa -15973217 1217386335
+Client.hintArrowPlayerIndex I S client ob -1755097653 -1351931933
+Client.hintArrowShiftX I S client om 819606429 -990057803
+Client.hintArrowShiftY I S client oc 1687394123 1023457891
+Client.hintArrowType I S client nn -1091333719 -690380135
+Client.hintArrowX I S client or -249917077 -352119997
+Client.hintArrowY I S client ox -932559439 -455810223
+Client.hintArrowZ I S client ok 1196280434 1025145097
+Client.host Ljava/lang/String; S bs lb
+Client.idleTime I S bx aa 1013399747 -450793493
+Client.instanceTemplateChunks [[[I S client po
+Client.isDynamicRegion Z S client pw
+Client.isResizable Z S client hn
+Client.isSpellSelected Z S client sn
+Client.isWorldSelectorOpen Z S by dt
+Client.itemTable Lqo; S ck al
+Client.keyboard Lae; S bv ae
+Client.lastActionDifference J S mf ab 7157878295955999821L -233464609013855099L
+Client.lastActionDifferenceMod J S mf ab -233464609013855099L 7157878295955999821L
+Client.lastActionTime J S mf al -4291259946509758447L -8655997059219431183L
+Client.lastActionTimeMod J S mf al -8655997059219431183L -4291259946509758447L
+Client.level [I S client gv
+Client.loadingState I S client lr -490251915 757722845
+Client.localPlayer Lcr; S bn gr
+Client.loginState I S by cw -565834461 1387694731
+Client.loginStats Lpi; S client od
+Client.lowMemory BROKEN
+Client.mapAngle I S client mz 2141292215 -495175929
+Client.mapRegions [I S ck pq
+Client.members Z S client fa
+Client.message0 Ljava/lang/String; S by ca
+Client.message1 Ljava/lang/String; S by cz
+Client.message2 Ljava/lang/String; S by cd
+Client.messageContainer Ljava/util/Map; S df al
+Client.mouse Lbx; S bx ay
+Client.nativeHeader BROKEN 596936697
+Client.nativeType I S client jr -2032922837 -374458493
+Client.nativeTypeVal BROKEN 1
+Client.password Ljava/lang/String; S by bb
+Client.pendingNpcFlagsCount I S client op 1355386735 1633988495
+Client.playerActions [Ljava/lang/String; S client rk
+Client.playerIndex I S client gq 1094621461 -474681795
+Client.playerModelCache Lmd; S nn ah
+Client.projectiles Lqp; S client gl
+Client.realLevel [I S client ge
+Client.refreshToken Ljava/lang/String; S od oj
+Client.rememberUsername Z S client fm
+Client.revision I S xj ac 459245573 -354417459
+Client.selectedSpellName Ljava/lang/String; S client sv
+Client.selectedWidgetFlags I S up sr 1806265689 -1175057687
+Client.selectedWidgetId I S vj sp -284803483 -2109258899
+Client.selectedWidgetIndex I S client ss 1974251651 608509483
+Client.selectedWidgetItemId I S client sw -589928191 -516253951
+Client.sessionId Ljava/lang/String; S uz oi
+Client.settings [I S ni ab
+Client.settingsObject Lcf; S bt ng
+Client.socialHandler Lbt; S fn ib
+Client.socketWrapper Ldw; S client cv
+Client.userId BROKEN -1L
+Client.username Ljava/lang/String; S by bk
+Client.varcs Ldx; S is hv
+Client.widgetBoundsX [I S client uh
+Client.widgetBoundsY [I S client um
+Client.widgetCount I S client ua -516585421 -1729056005
+Client.widgetHeights [I S client uy
+Client.widgetNodes Lqo; S client mh
+Client.widgetWidths [I S client ue
+Client.widgets Lnr; S gq fe
+Client.worlds [Lbg; S bg au
+Client.zoom I S client im 1182407033 -1800273719
+#Refactored 92 out of 99 fields!
+Client.browseDesktop (Ljava/lang/String;ZLjava/lang/String;ZB)V S oz ac -5
+Client.changeWorld (Lbg;I)V S fj ao -1784260808
+Client.doCycle (B)V L client br
+Client.doCycleLoggedIn BROKEN
+Client.doCycleLoggedOut (I)V L client qn 1152395856
+Client.draw (ZB)V L client ba
+Client.drawLoggedIn (B)V L client qf 15
+Client.drawModelWidgets BROKEN
+Client.getCacheFolder (Ljava/lang/String;B)Ljava/io/File; S cm ab -82
+Client.getLastActionTime (I)J S ed al 648893906
+Client.handleLoginResponse (II)V S ap hz -864112954
+Client.localPlayerSpawn BROKEN
+Client.npcDespawn (Ldj;ZLwk;B)V S kc lp 1
+Client.npcSpawn (Ldj;ZLwk;B)V S kc lp 1
+Client.onSceneXTEAChange (ZLwk;I)V S gh kd 854870572
+Client.playerSpawn (ILdj;B)Lcr; L bu as 122
+Client.processAction (IIIIIILjava/lang/String;Ljava/lang/String;IIB)V S fy lu -60
+Client.processMinimapClick (Lox;III)V S hm id 1061334519
+Client.processPackets (Ldw;B)Z L client qk 2
+Client.sendStackTrace (Ljava/lang/String;Ljava/lang/Throwable;I)V S vl al 30052573
+Client.setGameState (II)V S fc hp 363929870
+Client.setLoadingState (II)V S fc hp 363929870
+Client.setLoginMode BROKEN
+Client.setLoginResponse (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;B)V S rn aq 86
+Client.setLoginState (II)V S ci an -1056806775
+Client.setSelectedInfo (IIIIB)V S ol ly -88
+Client.updateNpcs (Ldj;ZLwk;B)V S kc lp 1
+#Refactored 21 out of 27 methods!
+
+@CollisionMap identified as: kp
+CollisionMap.flags [[I L kp br
+CollisionMap.height I L kp bd -343732379 133073517
+CollisionMap.offsetX I L kp bl 190876333 -1288214235
+CollisionMap.offsetY I L kp bf -893902351 565358353
+CollisionMap.width I L kp bc 940792031 754344735
+#Refactored 5 out of 5 fields!
+#Refactored 0 out of 0 methods!
+
+@CullingCluster identified as: jq
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@DirectByteBufferProvider identified as: og
+DirectByteBufferProvider.byteBuffer Ljava/nio/ByteBuffer; L og al
+#Refactored 1 out of 1 fields!
+#Refactored 0 out of 0 methods!
+
+@FileAccessor identified as: vv
+FileAccessor.accessor Ljava/io/RandomAccessFile; L vv ab
+FileAccessor.position J L vv ac -1249348163839063493L -7889486529973829901L
+FileAccessor.size J L vv al 1 1
+#Refactored 3 out of 3 fields!
+#Refactored 0 out of 0 methods!
+
+@FileBuffer identified as: vt
+FileBuffer.accessor Lvv; L vt ab
+FileBuffer.position J L vt am 1346801096343042339L 2976215243201560203L
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@FloorObject identified as: is
+FloorObject.flag I L is as 1355434533 -336674387
+FloorObject.id J L is ab 5282745047579754191L -4427756847908763601L
+FloorObject.plane I L is ac 535412003 -1215800693
+FloorObject.renderable Liq; L is al
+FloorObject.x I L is av -2142622221 -381668549
+FloorObject.y I L is au -373793125 1663129491
+#Refactored 6 out of 6 fields!
+#Refactored 0 out of 0 methods!
+
+@Friend identified as: se
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@FriendHandler identified as: sg
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@GZipDecompressor identified as: xp
+GZipDecompressor.inflater Ljava/util/zip/Inflater; L xp al
+#Refactored 1 out of 1 fields!
+GZipDecompressor.decompress (Lwj;[BI)V L xp al -602752220
+#Refactored 1 out of 1 methods!
+
+@GameObject identified as: jk
+GameObject.flags I L jk ai 18817421 2108033349
+GameObject.height I L jk au -728590613 -1585946173
+GameObject.id J L jk ac 782806108569820031L -8142717344677075841L
+GameObject.offsetX I L jk am -571975095 1556527097
+GameObject.offsetY I L jk ag -2115151203 830733237
+GameObject.orientation I L jk ab -1421468181 -547740989
+GameObject.plane I L jk av 1932754019 161670475
+GameObject.relativeX I L jk aj 113764389 1800008621
+GameObject.relativeY I L jk ap -1816823841 968426527
+GameObject.renderable Liq; L jk al
+GameObject.x I L jk as -419408947 -286994171
+GameObject.y I L jk ah -1233022439 24357417
+#Refactored 12 out of 12 fields!
+#Refactored 0 out of 0 methods!
+
+@GameScreenDrawing identified as: ry
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@GameScreenDrawingImpl identified as: ru
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@GameShell identified as: bv
+GameShell.canvas Ljava/awt/Canvas; L bv ba
+GameShell.crashed Z L bv bq
+GameShell.fps I S bv av -1 -1
+GameShell.gameshell Lbv; S bv aj
+#Refactored 4 out of 4 fields!
+GameShell.crash (Ljava/lang/String;I)V L bv bs 2074863666
+GameShell.focusGained (Ljava/awt/event/FocusEvent;)V L bv focusGained
+GameShell.focusLost (Ljava/awt/event/FocusEvent;)V L bv focusLost
+GameShell.paint (Ljava/awt/Graphics;)V L bv paint
+GameShell.run ()V L bv run
+GameShell.setupCanvas (I)V L bv ae -2128269090
+GameShell.start ()V L bv start
+#Refactored 7 out of 7 methods!
+
+@GrandExchangeItem identified as: qz
+GrandExchangeItem.amount I L qz av 1226304121 -798597175
+GrandExchangeItem.byte B L qz al 1 1
+GrandExchangeItem.id I L qz ab 1536404221 -94420395
+GrandExchangeItem.price I L qz ac -2120257835 -9414019
+GrandExchangeItem.transferredAmount I L qz au -1948586895 -73706351
+GrandExchangeItem.transferredValue I L qz as 1947550601 -807787847
+#Refactored 6 out of 6 fields!
+#Refactored 0 out of 0 methods!
+
+@GrandExchangeItemEvent identified as: qn
+GrandExchangeItemEvent.int1 I L qn al
+GrandExchangeItemEvent.item Lqz; L qn ac
+GrandExchangeItemEvent.long1 J L qn ab
+GrandExchangeItemEvent.string1 Ljava/lang/String; L qn av
+GrandExchangeItemEvent.string2 Ljava/lang/String; L qn au
+#Refactored 5 out of 5 fields!
+#Refactored 0 out of 0 methods!
+
+@GrandExchangeItemEventHolder identified as: pc
+GrandExchangeItemEventHolder.grandExchangeEventHolder Lpc; S jt is
+GrandExchangeItemEventHolder.grandExchangeItemEvents Ljava/util/List; L pc au
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@GraphicsObject identified as: bp
+GraphicsObject.animation Lrk; L bp ap
+GraphicsObject.id I L bp ah 1269406777 -310799863
+GraphicsObject.lastVisibleMaybe I L bp ab -358370001 798339535
+GraphicsObject.noSequenceFound BROKEN
+GraphicsObject.someIterationTracker BROKEN
+GraphicsObject.tileHeightsPositionHashThing I L bp as 141424343 1264016615
+GraphicsObject.x I L bp av 1770756941 1176966533
+GraphicsObject.y I L bp au 1057464841 1630571577
+GraphicsObject.z I L bp ac -339062497 -557585697
+#Refactored 7 out of 9 fields!
+#Refactored 0 out of 0 methods!
+
+@GraphicsProducer identified as: bm
+GraphicsProducer.component Ljava/awt/Component; L bm ab
+GraphicsProducer.image Ljava/awt/Image; L bm al
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@HashTable identified as: qo
+HashTable.buckets [Luj; L qo ab
+HashTable.current Luj; L qo av
+HashTable.head Luj; L qo ac
+HashTable.index I L qo au 1 1
+HashTable.size I L qo al 1 1
+#Refactored 5 out of 5 fields!
+HashTable.getFirstOccupiedNode ()Luj; L qo av
+HashTable.getNextNode ()Luj; L qo au
+HashTable.getTailNode (J)Luj; L qo al
+HashTable.insertNode (Luj;J)V L qo ac
+#Refactored 4 out of 4 methods!
+
+@HealthBar identified as: do
+HealthBar.composite Lha; L do ac
+HealthBar.data Lqm; L do av
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@HealthBarComposite identified as: ha
+HealthBarComposite.maxHealth I L ha ak -397083115 -646717123
+#Refactored 1 out of 1 fields!
+HealthBarComposite.decodeDefinition (Lwj;II)V L ha av 1830543019
+HealthBarComposite.loadDefinition (Lwj;B)V L ha ac 9
+#Refactored 2 out of 2 methods!
+
+@HealthBarData identified as: cz
+HealthBarData.currentHealth I L cz ab -1319476381 278541899
+#Refactored 1 out of 1 fields!
+#Refactored 0 out of 0 methods!
+
+@HuffmanEncoding identified as: oq
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@Ignored identified as: tk
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@IgnoredHandler identified as: sy
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@ImageDefinition identified as: ho
+#Refactored 0 out of 0 fields!
+ImageDefinition.decodeDefinition (Lwj;II)V L ho av 409648686
+ImageDefinition.loadDefinition (Lwj;B)V L ho ac 102
+#Refactored 2 out of 2 methods!
+
+@ImageRGB identified as: xv
+ImageRGB.height I L xv ap 1 1
+ImageRGB.offsetX I L xv am 1 1
+ImageRGB.offsetY I L xv aj 1 1
+ImageRGB.pixels [I L xv as
+ImageRGB.width I L xv ah 1 1
+#Refactored 5 out of 5 fields!
+#Refactored 0 out of 0 methods!
+
+@IndexedObjectIterator identified as: qh
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@IndexedObjectSet identified as: qw
+IndexedObjectSet.bucket [Lui; L qw ac
+IndexedObjectSet.count I L qw ab -1 -1
+IndexedObjectSet.current Lui; L qw av
+IndexedObjectSet.iterator Lqh; L qw al
+#Refactored 4 out of 4 fields!
+IndexedObjectSet.getByIndex (J)Lui; L qw al
+#Refactored 1 out of 1 methods!
+
+@IsaacCipher identified as: xs
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@Item identified as: dd
+Item.id I L dd ab -672817003 -895472963
+Item.stackSize I L dd ac -5181231 -205690831
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@ItemComposite identified as: id
+#Refactored 0 out of 0 fields!
+ItemComposite.getImage (IIIIIZIIB)Lxv; S sy ac 53
+ItemComposite.getItemDef (II)Lid; S ia ab 2095797343
+#Refactored 2 out of 2 methods!
+
+@ItemLayer identified as: ib
+ItemLayer.bottom Liq; L ib av
+ItemLayer.flag J L ib ah 6168778998003613095L -3543223564397733353L
+ItemLayer.height I L ib ap 138009977 1803484361
+ItemLayer.middle Liq; L ib au
+ItemLayer.plane I L ib al 1675178913 1593667681
+ItemLayer.top Liq; L ib as
+ItemLayer.x I L ib ab -310439053 1000032699
+ItemLayer.y I L ib ac -418956347 1733724941
+#Refactored 8 out of 8 fields!
+#Refactored 0 out of 0 methods!
+
+@ItemNode identified as: ck
+ItemNode.ids [I L ck ab
+ItemNode.stackSizes [I L ck ac
+#Refactored 2 out of 2 fields!
+ItemNode.addItemToNode (IIIIB)V S co av 44
+#Refactored 1 out of 1 methods!
+
+@Iterable identified as: qm
+Iterable.head Luj; L qm al
+Iterable.node Luj; L qm ab
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@IterableHashTable identified as: qr
+IterableHashTable.buckets [Luj; L qr ab
+IterableHashTable.current Luj; L qr av
+IterableHashTable.head Luj; L qr ac
+IterableHashTable.index I L qr au 1 1
+IterableHashTable.size I L qr al 1 1
+#Refactored 5 out of 5 fields!
+IterableHashTable.clear ()V L qr ac
+IterableHashTable.getFirstOccupiedNode ()Luj; L qr av
+IterableHashTable.getNextNode ()Luj; L qr au
+IterableHashTable.getTailNode (J)Luj; L qr al
+IterableHashTable.insertNode (Luj;J)V L qr ab
+#Refactored 5 out of 5 methods!
+
+@Keyboard identified as: ae
+Keyboard.idleTime I L ae as 1380019785 1359602681
+#Refactored 1 out of 1 fields!
+Keyboard.focusGained (Ljava/awt/event/FocusEvent;)V L ae focusGained
+Keyboard.focusLost (Ljava/awt/event/FocusEvent;)V L ae focusLost
+Keyboard.keyPressed (Ljava/awt/event/KeyEvent;)V L ae keyPressed
+Keyboard.keyReleased (Ljava/awt/event/KeyEvent;)V L ae keyReleased
+Keyboard.keyTyped (Ljava/awt/event/KeyEvent;)V L ae keyTyped
+#Refactored 5 out of 5 methods!
+
+@LinkedList identified as: qp
+LinkedList.current Luj; L qp ab
+LinkedList.tail Luj; L qp al
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@LoginNode identified as: nm
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@LoginStats identified as: pi
+LoginStats.alwaysZero1 I L pi aj -1671662321 -1808016913
+LoginStats.alwaysZeroMaybe I L pi ap -1211476705 1123739359
+LoginStats.gameState I L pi ah 923897285 -226596595
+LoginStats.lastLoginScreenStateTime J L pi ac -729746941421479871L -9039245487690811455L
+LoginStats.lastPacketReceived J L pi ab -7445399682987254329L 3806708093607842807L
+LoginStats.loginCount I L pi am 1499919753 994054329
+LoginStats.loginTime J L pi as -4435548914025393789L -1506640215061363413L
+LoginStats.logoutTime J L pi au -1908743626393324691L 4119305462829551205L
+LoginStats.shouldProcess Z L pi al
+LoginStats.timeBetweenLoginScreenAndLoginCompletion J L pi av 5695096056904187087L -5955589197092419025L
+#Refactored 10 out of 10 fields!
+LoginStats.completeLogin (I)V L pi av 1553349015
+LoginStats.completeLogin2 (B)V L pi as 37
+LoginStats.markProcessed (I)V L pi au -611970177
+LoginStats.updateGameState (II)V L pi ac -1113588887
+LoginStats.updateLastLoggedOut (I)V L pi ab 1135163806
+LoginStats.updateLastPacketReceivedTime (I)V L pi al 1334641211
+LoginStats.writeTo (Lwj;I)V L pi ah -109868908
+#Refactored 7 out of 7 methods!
+
+@MachineInfo identified as: ut
+#Refactored 0 out of 0 fields!
+MachineInfo.getUUID (II)Ljava/lang/String; L ut ac -1042538431
+MachineInfo.init (IZIIIIIZIIIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IIIILjava/lang/String;Ljava/lang/String;[IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V L ut <init>
+#Refactored 2 out of 2 methods!
+
+@Menu identified as: xz
+Menu.actions [Ljava/lang/String; L xz am
+Menu.count I L xz ab -1208434705 1273909007
+Menu.height I L xz ar 45702685 -883534795
+Menu.itemIdCodes [I L xz ah
+Menu.lastHovered I L xz at 737729121 114903457
+Menu.menu Lxz; S client sc
+Menu.opcodes [I L xz au
+Menu.options [Ljava/lang/String; L xz aj
+Menu.shiftClick [Z L xz ay
+Menu.submenu [Lxz; L xz ag
+Menu.targetRegionIndex [I L xz ap
+Menu.variables [I L xz as
+Menu.visible Z S client sb
+Menu.width I L xz ak -1856030931 -32690011
+Menu.x I L xz aa -1162419305 1649527847
+Menu.xCodes [I L xz ac
+Menu.y I L xz ai -1851249883 -1012664147
+Menu.yCodes [I L xz av
+#Refactored 18 out of 18 fields!
+Menu.addCancelRow (I)V S gp la 1680957230
+Menu.addRow (Ljava/lang/String;Ljava/lang/String;IIIIIZII)I L xz ay 323732941
+Menu.setBounds (I)V L xz ab 53756451
+Menu.setLocation (III)V L xz ac 249461983
+#Refactored 4 out of 4 methods!
+
+@MessageChannel identified as: cq
+MessageChannel.messageIndex I L cq ac 705681979 -2145128717
+MessageChannel.messages [Lbd; L cq ab
+#Refactored 2 out of 2 fields!
+MessageChannel.addNode (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;I)Lbd; L cq al 1609462101
+MessageChannel.getNode (II)Lbd; L cq ab -1459480157
+#Refactored 2 out of 2 methods!
+
+@MessageNode identified as: bd
+MessageNode.clan Ljava/lang/String; L bd as
+MessageNode.index I L bd al -1163384433 -597764753
+MessageNode.nameComposite Lxf; L bd au
+MessageNode.sender Ljava/lang/String; L bd av
+MessageNode.text Ljava/lang/String; L bd ah
+MessageNode.time I L bd ab 789934735 -1540264849
+MessageNode.type I L bd ac 1979105943 1937038631
+#Refactored 7 out of 7 fields!
+#Refactored 0 out of 0 methods!
+
+@Model identified as: jx
+Model.indicesLength I L jx bh 1 1
+Model.indicesX [I L jx bp
+Model.indicesY [I L jx bz
+Model.indicesZ [I L jx bk
+Model.onCursorUIDs [J S jl bh
+Model.overrides Lja; L jx ca
+Model.textureIndicesX [I L jx bb
+Model.textureIndicesY [I L jx by
+Model.textureIndicesZ [I L jx cg
+Model.uidCount I S jl ba -942059985 -865552177
+Model.vectorSkin [[I L jx ch
+Model.verticesLength I L jx bu 1 1
+Model.verticesX [I L jx bg
+Model.verticesY [I L jx bt
+Model.verticesZ [I L jx bs
+#Refactored 15 out of 15 fields!
+Model.animate (Lin;I)V L jx ax
+Model.drawTriangle (I)V L jx bg
+Model.renderAtPoint (ILrr;IIIJ)V L jx kt
+Model.renderWithUID (ZZZJ)V L jx bl 0L
+#Refactored 6 out of 6 methods!
+
+@ModelOverrides identified as: ja
+ModelOverrides.amount B L ja av 1 1
+ModelOverrides.hue B L ja al 1 1
+ModelOverrides.luminance B L ja ac 1 1
+ModelOverrides.saturation B L ja ab 1 1
+#Refactored 4 out of 4 fields!
+#Refactored 0 out of 0 methods!
+
+@Mouse identified as: bx
+Mouse.idle I S bx aa 1013399747 -450793493
+Mouse.immediateClickX I S bx aq 553272611 -1749020021
+Mouse.immediateClickXSet I S bx aq -1744399765 1552845379
+Mouse.immediateClickY I S bx ao -77460077 364124315
+Mouse.immediateClickYSet I S bx ao 1286825355 1889212963
+Mouse.immediateMoveTime J S bx at 3846727532306999639L -6491063995056768843L
+Mouse.immediateX I S bx ak 1121781197 -1595228889
+Mouse.immediateY I S bx ar -1188618517 1418161345
+Mouse.lastClickX I S bx am 2120075361 -354755679
+Mouse.lastClickY I S bx aj -134735055 1331781073
+Mouse.lastX I S bx au 1356785139 -900318405
+Mouse.lastY I S bx as -1953188989 -2122943701
+#Refactored 12 out of 12 fields!
+#Refactored 0 out of 0 methods!
+
+@MouseTracker identified as: cv
+MouseTracker.length I L cv ac 293125129 -1004957127
+MouseTracker.lock Ljava/lang/Object; L cv ab
+MouseTracker.mouseTracker Lcv; S la ju
+MouseTracker.timePoints [J L cv as
+MouseTracker.tracking Z L cv al
+MouseTracker.xCoordinates [I L cv av
+MouseTracker.yCoordinates [I L cv au
+#Refactored 7 out of 7 fields!
+MouseTracker.run ()V L cv run
+#Refactored 1 out of 1 methods!
+
+@NPCOverheadIcon identified as: wb
+NPCOverheadIcon.iconArchiveIds [I L wb al
+NPCOverheadIcon.iconSpriteIndices [S L wb ab
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@NameComposite identified as: xf
+NameComposite.formatted Ljava/lang/String; L xf ab
+NameComposite.name Ljava/lang/String; L xf al
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@NameProvider identified as: tb
+NameProvider.name Lxf; L tb ac
+NameProvider.previousName Lxf; L tb av
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@NameProviderHandler identified as: tt
+NameProviderHandler.currentMap Ljava/util/HashMap; L tt ay
+NameProviderHandler.nameProviders [Ltb; L tt ag
+NameProviderHandler.previousMap Ljava/util/HashMap; L tt aa
+NameProviderHandler.size I L tt aj 1375783451 1558380563
+#Refactored 4 out of 4 fields!
+#Refactored 0 out of 0 methods!
+
+@Node identified as: uj
+Node.id J L uj hz 1 1
+Node.next Luj; L uj hk
+Node.previous Luj; L uj hb
+#Refactored 3 out of 3 fields!
+Node.hasPrevious ()Z L uj ki
+Node.unlink ()V L uj cp
+#Refactored 2 out of 2 methods!
+
+@Npc identified as: da
+Npc.chatHeadModelOverride Lhu; L da aj
+Npc.composite Lhg; L da av
+Npc.modelOverride Lhu; L da am
+Npc.overheadIcon Lwb; L da ap
+#Refactored 4 out of 4 fields!
+Npc.updateNpcLocation (III)V L ca cz
+#Refactored 1 out of 1 methods!
+
+@NpcComposite identified as: hg
+NpcComposite.actions [Ljava/lang/String; L hg bo
+NpcComposite.id I L hg ah -1552593921 234533887
+NpcComposite.name Ljava/lang/String; L hg ap
+NpcComposite.size I L hg am -1396635903 -1972373247
+#Refactored 4 out of 4 fields!
+#Refactored 0 out of 0 methods!
+
+@NpcOverride identified as: hu
+NpcOverride.color [S L hu ac
+NpcOverride.id J L hu al -7069476798080068169L -4519367718092302329L
+NpcOverride.modelIds [I L hu ab
+NpcOverride.texture [S L hu av
+NpcOverride.useLocalPlayer Z L hu au
+#Refactored 5 out of 5 fields!
+#Refactored 0 out of 0 methods!
+
+@ObjectComposite identified as: ia
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@OutgoingPacket identified as: mb
+OutgoingPacket.clientPacketLength I L mb ah -86333877 1870295907
+OutgoingPacket.index I L mb am -1259843157 -1941954301
+OutgoingPacket.packetBuffer Lwk; L mb ap
+OutgoingPacket.packetSignature Lmi; L mb as
+#Refactored 4 out of 4 fields!
+OutgoingPacket.buildOutgoingPacket (Lmi;Lxs;I)Lmb; S lh al 1378706167
+OutgoingPacket.release (I)V L mb ac -1612966036
+#Refactored 2 out of 2 methods!
+
+@Packet identified as: wk
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@PacketSignature identified as: mi
+PacketSignature.signature I L mi dn -675159431 -2042959927
+PacketSignature.type I L mi dg 1592024691 641889979
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@Player identified as: cr
+Player.composite Lnn; L cr av
+Player.hidden Z L cr aw
+Player.level I L cr ap -1200807265 1576892767
+Player.model Ljx; L cr ar
+Player.name Lxf; L cr ac
+Player.overheadIcon I L cr as 64148653 1331277605
+Player.skullIcon I L cr au -827095657 -1386264025
+Player.standingStill Z L cr az
+Player.team I L cr ad 971214193 -1145728111
+#Refactored 9 out of 9 fields!
+Player.decodePlayerData (Lwj;I)V L cr ab 991561622
+#Refactored 1 out of 1 methods!
+
+@PlayerComposite identified as: nn
+PlayerComposite.animatedModelID J L nn at -1411389408114792893L -2646121610715113877L
+PlayerComposite.appearance [I L nn ag
+PlayerComposite.bodyColors [I L nn ay
+PlayerComposite.gender I L nn ai 989799293 2121051605
+PlayerComposite.npcID I L nn ak 697401271 -1656582649
+PlayerComposite.staticModelID J L nn ar -7415522420965830209L -4797080450574721473L
+#Refactored 6 out of 6 fields!
+PlayerComposite.getCharacterModel (Liz;ILiz;IB)Ljx; L nn aj -13
+PlayerComposite.setAppearance ([I[I[IIII)V L nn ac 1658606719
+#Refactored 2 out of 2 methods!
+
+@Projectile identified as: cg
+Projectile.doubleHeight BROKEN 1
+Projectile.endCycle I L cg ay -694640509 -1023985999
+Projectile.floorLevel I L cg aj 1130927365 1668149197
+Projectile.height I L cg as -1422699951 -1023985999
+Projectile.heightOffset BROKEN 1
+Projectile.id I L cg ad 467802363 526539709
+Projectile.moving Z L cg ao
+Projectile.originEntityIndex I L cg au 1871374375 -863500393
+Projectile.originX I L cg ab 90650517 -863500393
+Projectile.originY I L cg ac 513637745 1581097873
+Projectile.targetX I L cg ah -709220025 809152631
+Projectile.targetY I L cg ap -385973739 -1295043
+Projectile.rotationX BROKEN
+Projectile.rotationY BROKEN
+Projectile.sequence BROKEN
+Projectile.slope I L cg am 1175626559 998165695
+Projectile.speedX BROKEN 1
+Projectile.speedY BROKEN 1
+Projectile.speedZ BROKEN 1
+Projectile.startCycle I L cg ag -541523095 998165695
+Projectile.targetDistance I L cg am 1175626559 998165695
+Projectile.targetIndex I L cg aj 1130927365 1668149197
+Projectile.x D L cg ak 1D 1D
+Projectile.y D L cg ar 1D 1D
+#Refactored 11 out of 22 fields!
+Projectile.move (Lcw;III)V L cg au 1286843870
+Projectile.target (Lcw;III)V L cg au 1286843870
+#Refactored 1 out of 1 methods!
+
+@Queue identified as: qg
+Queue.cacheNode Lux; L qg ab
+Queue.head Lux; L qg al
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@Rasterizer2D identified as: wz
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@ReferenceTable identified as: px
+ReferenceTable.objects [[Ljava/lang/Object; L px bt
+#Refactored 1 out of 1 fields!
+ReferenceTable.loadDataIntoArray (II[II)[B L px bs -1622009833
+ReferenceTable.loadFileDataFromArchive (III)[B L px bt 276460412
+#Refactored 2 out of 2 methods!
+
+@ReferenceTableImpl identified as: po
+ReferenceTableImpl.configRefTable Lpo; S ak kl
+ReferenceTableImpl.soundFXRefTable Lpo; S au ka
+#Refactored 2 out of 2 fields!
+ReferenceTableImpl.buildRefTable (IZZZZI)Lpo; S op hr
+ReferenceTableImpl.loadAudioEffect (Lpx;II)Ldn; S dn ab
+#Refactored 2 out of 2 methods!
+
+@ReferenceTableType identified as: pk
+ReferenceTableType.configRefTableId Lpk; S pk av
+ReferenceTableType.id I L pk bj 1475862597 -1329843571
+ReferenceTableType.soundFXRefTableId Lpk; S pk as
+#Refactored 3 out of 3 fields!
+#Refactored 0 out of 0 methods!
+
+@Region identified as: iy
+Region.drawDistance I L iy df 1
+Region.focusedX I L iy ba 1 1
+Region.focusedY I L iy bh 1 1
+Region.gameObjects [Ljk; L iy cw
+Region.tiles [[[Lip; L iy be
+#Refactored 5 out of 7 fields!
+Region.buildBoundaryObject (IIIILiq;Liq;IIJI)V L iy ay
+Region.buildFloorDecoration (IIIILiq;JI)V L iy aj
+Region.buildGameObject (IIIIIIIILiq;IZJI)Z L iy ao 0
+Region.buildItemPile (IIIILiq;JLiq;Liq;)V L iy ag
+Region.buildWallDecoration (IIIILiq;Liq;IIIIJI)V L iy aa
+Region.despawnGameObject (III)V L iy bj
+Region.drawTileOverlay BROKEN
+Region.drawTileUnderlay BROKEN
+Region.removeBoundaryObject (III)V L iy an
+Region.removeFloorDecoration (III)V L iy bn
+Region.removeGameObject (Ljk;)V L iy ad
+Region.removeGroundItem (III)V L iy bi
+Region.removeWallObject (III)V L iy ae
+Region.resetWalkVariables (Z)V L iy cv
+Region.sendWalkOnScreen (B)V L client qz -90
+#Refactored 15 out of 17 methods!
+
+@Renderable identified as: iq
+Renderable.modelHeight I L iq ei 1899900991 -56246337
+#Refactored 1 out of 1 fields!
+Renderable.getModel (B)Ljx; L iq ac 15
+Renderable.renderAtPoint (ILrr;IIIJ)V L iq kt
+#Refactored 2 out of 2 methods!
+
+@RuneScript identified as: ce
+RuneScript.availableIntegers I L ce am 1320278685 -1679590475
+RuneScript.availableStrings I L ce aj 1417864765 511598869
+RuneScript.integersLength I L ce ah 696982785 314434305
+RuneScript.stringsLength I L ce ap -1844842555 524662541
+#Refactored 4 out of 4 fields!
+#Refactored 0 out of 0 methods!
+
+@RuneScriptReference identified as: bc
+RuneScriptReference.eventStepValue I L bc ab -1554885489 1969506927
+RuneScriptReference.localIntegers [I L bc ac
+RuneScriptReference.localStrings [Ljava/lang/Object; L bc av
+RuneScriptReference.scriptDef Lce; L bc al
+#Refactored 4 out of 4 fields!
+#Refactored 0 out of 0 methods!
+
+@Scene identified as: dj
+Scene.baseX I L dj ap -793021063 846849225
+Scene.baseY I L dj am -1567916071 -12382103
+Scene.collisionMaps [Lkp; L dj av
+Scene.graphicsObjects Lqp; L dj ax
+Scene.groundItems [[[Lqp; L dj ar
+Scene.height I L dj ah 471429473 236122785
+Scene.id I L dj ab 1326880253 -1842483371
+Scene.npcs Lqw; L dj ai
+Scene.plane I L dj au -978921491 -652796443
+Scene.players Lqw; L dj aa
+Scene.region Liy; L dj ac
+Scene.tileHeights [[[I L dj ag
+Scene.tileSettings [[[B L dj ay
+Scene.width I L dj as 1058891635 1469257147
+#Refactored 14 out of 14 fields!
+#Refactored 0 out of 0 methods!
+
+@ScriptEvent identified as: cx
+ScriptEvent.args [Ljava/lang/Object; L cx ab
+ScriptEvent.dragTarget Lox; L cx ap
+ScriptEvent.mouseInput Z L cx al
+ScriptEvent.mouseX I L cx av -907405385 -609389049
+ScriptEvent.mouseY I L cx au -838475017 -2059305273
+ScriptEvent.opbase Ljava/lang/String; L cx ag
+ScriptEvent.type I L cx aa 1350749231 -1713767729
+ScriptEvent.var I L cx as 1315775245 -238132283
+ScriptEvent.widget Lox; L cx ac
+#Refactored 9 out of 9 fields!
+ScriptEvent.runEvent (Lcx;B)V S iz al 1
+#Refactored 1 out of 1 methods!
+
+@Sequence identified as: iz
+Sequence.db_sequenceId I L iz db_sequenceId 1 1
+#Refactored 0 out of 0 fields!
+Sequence.decodeDefinition (Lwj;II)V L iz ap -1915398496
+Sequence.getAnimationDef (IB)Liz; S aq al -25
+Sequence.loadDefinition (Lwj;I)V L iz ah -26372546
+#Refactored 3 out of 3 methods!
+
+@ServerPacket identified as: mt
+ServerPacket.id I L mt fw -297629703 -61633975
+ServerPacket.length I L mt fp -67312391 -341402295
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@SettingsClass identified as: cf
+SettingsClass.areaVolume I L cf ai 287814645 2107711581
+SettingsClass.brightness D L cf ag 1.0D 1
+SettingsClass.clientParameters Ljava/util/Map; L cf au
+SettingsClass.displayFps Z L cf am
+SettingsClass.hideUsername Z L cf ah
+SettingsClass.language I L cf ak -473506497 1204654783
+SettingsClass.lobbyMusicDisabled Z L cf ap
+SettingsClass.musicVolume I L cf ay 1571234849 -745447455
+SettingsClass.resizableMode I L cf at 783489357 2028849029
+SettingsClass.roofsHidden Z L cf as
+SettingsClass.savedUsername Ljava/lang/String; L cf ar
+SettingsClass.soundEffectVolume I L cf aa -41942377 25140519
+#Refactored 12 out of 12 fields!
+SettingsClass.getAreaVolume (I)I L cf ad 190214644
+SettingsClass.getDisplayFps (I)Z L cf ay 237404366
+SettingsClass.getHideUsername (I)Z L cf ah -2145016399
+SettingsClass.getLobbyMusicDisabled (B)Z L cf am -64
+SettingsClass.getMusicVolume (I)I L cf ax 832600993
+SettingsClass.getResizable (I)I L cf bn 1221456903
+SettingsClass.getRoofsHidden (I)Z L cf au -597162114
+SettingsClass.getSavedUsername (I)Ljava/lang/String; L cf af 1692868952
+SettingsClass.getSoundEffectVolume (I)I L cf ao -1398367240
+SettingsClass.setAreaVolume (II)V L cf aw 2133527638
+SettingsClass.setDisplayFps (ZB)V L cf aa 109
+SettingsClass.setHideUsername (ZB)V L cf ap 9
+SettingsClass.setLobbyMusicDisabled (ZI)V L cf aj -541558897
+SettingsClass.setMusicVolume (IB)V L cf aq 6
+SettingsClass.setResizable (II)V L cf bi 1568803728
+SettingsClass.setRoofsHidden (ZI)V L cf as -1748187428
+SettingsClass.setSavedUsername (Ljava/lang/String;I)V L cf an 1155208281
+SettingsClass.setSoundEffectVolume (II)V L cf az 379668236
+SettingsClass.staticSetMusicVolume (IB)V S lp nf 2
+SettingsClass.writeToStream (B)Lwj; L cf av 5
+#Refactored 20 out of 24 methods!
+
+@Skeleton identified as: ih
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@SocialHandler identified as: bt
+SocialHandler.friendHandler Lsg; L bt au
+SocialHandler.ignoredHandler Lsy; L bt as
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@Socket identified as: tg
+Socket.socket Ljava/net/Socket; L tg al
+#Refactored 1 out of 1 fields!
+#Refactored 0 out of 0 methods!
+
+@SocketWrapper identified as: dw
+SocketWrapper.bufferSize I L dw ab -1488328577 242079615
+SocketWrapper.cipher Lxs; L dw av
+SocketWrapper.iterable Lqm; L dw al
+SocketWrapper.packet Lwk; L dw au
+SocketWrapper.pendingWrites I L dw aj -549065699 874001973
+SocketWrapper.serverPacket Lmt; L dw as
+SocketWrapper.serverPacketLength I L dw ah -404162649 932724759
+SocketWrapper.socket Ltl; L dw ar
+SocketWrapper.stream Lwj; L dw ac
+#Refactored 9 out of 9 fields!
+SocketWrapper.clearBuffer (I)V L dw al -141492134
+SocketWrapper.close (I)V L dw av -1537967348
+SocketWrapper.flush (B)V L dw ab -31
+SocketWrapper.getSocket (I)Ltl; L dw as -1577416093
+SocketWrapper.queueOutgoingPacket (Lmb;B)V L dw ac -60
+SocketWrapper.removeSocket (I)V L dw au 1498177759
+SocketWrapper.setSocket (Ltl;I)V L dw ah 287980534
+#Refactored 7 out of 7 methods!
+
+@SomeNode identified as: dy
+#Refactored 0 out of 0 fields!
+#Refactored 0 out of 0 methods!
+
+@SomeRenderableNode identified as: ui
+SomeRenderableNode.id J L ui eo 1 1
+SomeRenderableNode.next Lui; L ui ej
+SomeRenderableNode.previous Lui; L ui ee
+#Refactored 3 out of 3 fields!
+SomeRenderableNode.unlink ()V L ui kb
+#Refactored 1 out of 1 methods!
+
+@SpotAnimation identified as: ty
+SpotAnimation.animation Lrk; L ty ab
+SpotAnimation.delay I L ty av 363369293 877321605
+SpotAnimation.id I L ty al 1871773193 433582137
+SpotAnimation.tick I L ty ac -767202117 708966515
+#Refactored 4 out of 4 fields!
+#Refactored 0 out of 0 methods!
+
+@Stream identified as: wj
+Stream.offset I L wj aa -602712499 944624261
+Stream.payload [B L wj ay
+#Refactored 2 out of 2 fields!
+#Refactored 0 out of 0 methods!
+
+@StringConstants identified as: ph
+StringConstants.accountDisabled Ljava/lang/String; S ph ct
+StringConstants.drop Ljava/lang/String; S ph ao
+StringConstants.enterUsernameAndPassword Ljava/lang/String; S ph iq
+#Refactored 3 out of 3 fields!
+#Refactored 0 out of 0 methods!
+
+@Tile identified as: ip
+Tile.boundary Ljp; L ip ag
+Tile.floor Lis; L ip aa
+Tile.innerTile Lip; L ip af
+Tile.itemLayer Lib; L ip av
+Tile.objectCount I L ip au -649575905 284867039
+Tile.objects [Ljk; L ip as
+Tile.plane I L ip ah -875667687 -631075543
+Tile.wall Ljc; L ip ay
+Tile.x I L ip ap 685137059 -557762805
+Tile.y I L ip am -1690732139 2002717117
+#Refactored 10 out of 10 fields!
+#Refactored 0 out of 0 methods!
+
+@Traversed identified as: ke
+Traversed.speed B L ke au
+#Refactored 1 out of 1 fields!
+#Refactored 0 out of 0 methods!
+
+@VarBit identified as: hx
+VarBit.index I L hx av 1142076203 -86609021
+VarBit.leastSig I L hx au -1838225857 -2141845057
+VarBit.mostSig I L hx as -1324654765 865746139
+#Refactored 3 out of 3 fields!
+VarBit.decodeDefinition (Lwj;IB)V L hx au -102
+VarBit.getVarBitValue (II)I S iz ab -2081052599
+VarBit.loadDefinition (Lwj;I)V L hx av 1791016684
+VarBit.setVarBitValue BROKEN
+#Refactored 3 out of 4 methods!
+
+@Varcs identified as: dx
+Varcs.intsPersistence [Z L dx ac
+Varcs.map Ljava/util/Map; L dx av
+Varcs.strings BROKEN
+Varcs.unwrittenChanges Z L dx au
+#Refactored 3 out of 4 fields!
+#Refactored 0 out of 0 methods!
+
+@WallObject identified as: jc
+WallObject.backUpRenderable Liq; L jc ab
+WallObject.flags I L jc aa 1931344609 -332871391
+WallObject.id J L jc ac -1360717247176388875L 5324654489137311069L
+WallObject.orientation I L jc ap 738440143 -323718353
+WallObject.plane I L jc av 355786887 2124277047
+WallObject.relativeX BROKEN
+WallObject.relativeY BROKEN
+WallObject.renderable Liq; L jc al
+WallObject.x I L jc au 1661396665 1061109641
+WallObject.y I L jc as -68301323 -1284458915
+#Refactored 8 out of 10 fields!
+#Refactored 0 out of 0 methods!
+
+@Widget identified as: ox
+Widget.actionType I L ox br -847669731 -676340683
+Widget.actions [Ljava/lang/String; L ox eu
+Widget.alpha I L ox ct 1986507341 1130681989
+Widget.borderThickness I L ox da 1796173045 1343020893
+Widget.boundsIndex I L ox hh -1518473373 1250626123
+Widget.childSequenceId I L ox dx 275848073 -352204103
+Widget.childTextureId I L ox cd 644614147 -588455253
+Widget.children [Lox; L ox gx
+Widget.componentIndex I L ox bf -64977777 814750319
+Widget.containsMouse Z L ox gv
+Widget.contentType I L ox ba -690426589 -1054168437
+Widget.disabledMediaId I L ox dd -205925847 349825561
+Widget.disabledMediaType I L ox dt 1297474565 -328513331
+Widget.dragDeadTime I L ox er -1743847673 -1822671177
+Widget.dynamicValue [[I L ox gp
+Widget.enabledMediaId I L ox dp -1698271655 -1199965719
+Widget.enabledMediaType I L ox du -541732573 993453707
+Widget.hasListener Z L ox ey
+Widget.hasScript Z L ox bx
+Widget.height I L ox cs -1326764757 1782851971
+Widget.hidden Z L ox cm
+Widget.id I L ox bl -1992961173 789758275
+Widget.isClicked Z L ox ge
+Widget.itemId I L ox gi -23200605 354850571
+Widget.itemStackSize I L ox gn 1704537035 1618682339
+Widget.loopCycle I L ox ha 817168159 -928662305
+Widget.modelRotationX I L ox de -1670967949 -747184197
+Widget.modelRotationY I L ox dn -1139997191 -1141461943
+Widget.modelRotationZ I L ox dg -648359643 396812973
+Widget.name Ljava/lang/String; L ox ez
+Widget.parent Lox; L ox ed
+Widget.parentId I L ox cq -8451855 1607919633
+Widget.scrollMax I L ox cx -1336709509 900808883
+Widget.scrollX I L ox ck -221183769 1196954327
+Widget.scrollY I L ox cn -58877143 1054945561
+Widget.selectedAction Ljava/lang/String; L ox ea
+Widget.sequenceId I L ox dq 1442885011 -954304357
+Widget.sequenceIndex I L ox gs 380104199 -28434505
+Widget.shadowColor I L ox di -1475932345 -742921609
+Widget.slotIds [I L ox gf
+Widget.slotStackSizes [I L ox ga
+Widget.spell Ljava/lang/String; L ox gr
+Widget.spriteAngle I L ox dj -516211205 974800179
+Widget.subActions [[Ljava/lang/String; L ox et
+Widget.text Ljava/lang/String; L ox dy
+Widget.textColor I L ox cv -1766903527 -657482967
+Widget.textShadowed Z L ox ee
+Widget.textureId I L ox cz 1958991541 1233708957
+Widget.tooltip Ljava/lang/String; L ox gy
+Widget.type I L ox bd -1300290173 1317867819
+Widget.width I L ox cg -540565877 -1230677725
+Widget.x I L ox bb -1685529277 780375915
+Widget.y I L ox by 1382257165 -290976571
+#Refactored 53 out of 53 fields!
+Widget.decodeScriptWidget (Lwj;B)V L ox au -26
+Widget.decodeWidget (Lwj;B)V L ox as 98
+Widget.insertAction (ILjava/lang/String;B)V L ox at 8
+Widget.loadInterface BROKEN
+Widget.readScriptParameters (Lwj;B)[Ljava/lang/Object; L ox ah 86
+Widget.readTriggers (Lwj;I)[I L ox ap 884371028
+Widget.setBoundsForWidget ([Lox;IIIIIIIIIIII)V S dj mu 899027973
+Widget.switchItemSlot (IILjava/lang/String;I)V L ox ax 1605298331
+Widget.updateInterface ([Lox;IIIIIIIIIII)V S ov ns 2080976140
+#Refactored 10 out of 11 methods!
+
+@WidgetNode identified as: ch
+WidgetNode.id I L ch al -993511513 1581580311
+#Refactored 1 out of 1 fields!
+#Refactored 0 out of 0 methods!
+
+@Widgets identified as: nr
+Widgets.widgets [[Lox; L nr ah
+#Refactored 1 out of 1 fields!
+#Refactored 0 out of 0 methods!
+
+@World identified as: bg
+World.host Ljava/lang/String; L bg ai
+World.id I L bg ag 1429075557 -1642280083
+World.message Ljava/lang/String; L bg ak
+World.population I L bg aa -387466825 -963283961
+World.size I S bg as -1879435535 1259346449
+World.type I L bg ay -560888867 -700715915
+#Refactored 6 out of 6 fields!
+#Refactored 0 out of 0 methods!

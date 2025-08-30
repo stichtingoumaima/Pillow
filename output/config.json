@@ -1,0 +1,5 @@
+{
+  "revisionFile": "revision.txt",
+  "scriptConfigDir": "configs/",
+  "serverUrl": "http://localhost:6666/"
+}

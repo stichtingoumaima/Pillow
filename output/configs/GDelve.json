@@ -1,0 +1,10 @@
+{
+  "name": "GDelve",
+  "description": "Kills the Doom of Mokhaiotl. Reverse muling, auto-restocking, dynamic gearing, near inf prayer with lazy flicking.",
+  "version": 38.15,
+  "author": "GZero",
+  "imageUrl": "55febfb96146b65cb5d84f5d.png",
+  "threadUrl": "https://dreambot.org/forums/index.php?/topic/40217-g-delve-just-click-start-auto-restock-integrated-muling-easy-setup-quickstart-supported/://:moka woka doka boka",
+  "jarFile": "jars/GDelve.jar",
+  "optionFile": "options/GDelve.txt"
+}
